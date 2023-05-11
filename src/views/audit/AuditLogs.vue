@@ -1,7 +1,7 @@
 <template>
-    <div>
-        AuditLogs page
-    </div>
+  <div>
+    AuditLogs page
+  </div>
 </template>
 
 <script>
