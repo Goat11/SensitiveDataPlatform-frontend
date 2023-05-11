@@ -16,14 +16,13 @@ export const asyncRouterMap = [
     meta: { title: 'menu.home' },
     redirect: '/home',
     children: [
-      // home
+      // 首页
       {
         path: '/home',
         name: 'home',
         component: () => import('@/views/home/HomePage'),
         meta: { title: '首页', icon: 'home', keepAlive: true, permission: ['home'] }
       },
-      
       // 用户管理
       {
         path: '/userManage',
@@ -79,7 +78,23 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // 审计管理
+      {
+        path: '/audit',
+        name: 'audit',
+        component: RouteView,
+        redirect: '/audit/AuditLogs',
+        meta: { title: '审计管理', icon: 'audit', permission: ['audit'] },
+        children: [
+        // 系统日志查询
+          {
+            path: '/audit/AuditLogs',
+            name: 'AuditLogs',
+            component: () => import('@/views/audit/AuditLogs'),
+            meta: { title: '系统日志查询', keepAlive: true, permission: ['audit'] }
+          }
+        ]
+      },
       // dashboard
       {
         path: '/dashboard',
