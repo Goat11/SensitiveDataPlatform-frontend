@@ -13,15 +13,16 @@ module.exports = {
     'generator-star-spacing': 'off',
     'no-mixed-operators': 0,
     'vue/max-attributes-per-line': [
-      2,
+      'warn',
       {
         'singleline': 5,
         'multiline': {
           'max': 1,
-          'allowFirstLine': false
+          'allowFirstLine': true
         }
       }
     ],
+    'space-before-function-paren': 0,
     'vue/attribute-hyphenation': 0,
     'vue/html-self-closing': 0,
     'vue/component-name-in-template-casing': 0,

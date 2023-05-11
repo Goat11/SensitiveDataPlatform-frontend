@@ -35,5 +35,10 @@ export default {
     'menu.account.center': '个人中心',
     'menu.account.settings': '个人设置',
     'menu.account.trigger': '触发报错',
-    'menu.account.logout': '退出登录'
+    'menu.account.logout': '退出登录',
+    // 新增
+    'menu.userPermission': '用户权限',
+    'menu.userPermission.userPermissionApply': '权限申请',
+    'menu.userPermission.userPermissionManage': '权限管理',
+    'menu.home.homePage': '主页'
 }

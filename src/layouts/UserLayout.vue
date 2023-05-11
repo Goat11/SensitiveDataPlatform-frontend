@@ -1,5 +1,4 @@
 <template>
-
   <div id="userLayout" :class="['user-layout-wrapper', isMobile && 'mobile']">
     <div class="container">
       <div class="user-layout-lang">
@@ -10,7 +9,7 @@
           <div class="header">
             <a href="/">
               <img src="~@/assets/logo.svg" class="logo" alt="logo">
-              <span class="title">Ant Design</span>
+              <span class="title"> 敏感数据服务平台 </span>
             </a>
           </div>
           <div class="desc">
@@ -25,9 +24,6 @@
             <a href="_self">帮助</a>
             <a href="_self">隐私</a>
             <a href="_self">条款</a>
-          </div>
-          <div class="copyright">
-            Copyright &copy; 2018 vueComponent
           </div>
         </div>
       </div>
@@ -45,10 +41,12 @@ export default {
     SelectLang
   },
   mixins: [deviceMixin],
-  mounted () {
+  mounted
+    () {
     document.body.classList.add('userLayout')
   },
-  beforeDestroy () {
+  beforeDestroy
+    () {
     document.body.classList.remove('userLayout')
   }
 }
@@ -129,6 +127,7 @@ export default {
             top: 2px;
           }
         }
+
         .desc {
           font-size: 14px;
           color: rgba(0, 0, 0, 0.45);
@@ -154,18 +153,17 @@ export default {
         .links {
           margin-bottom: 8px;
           font-size: 14px;
+
           a {
             color: rgba(0, 0, 0, 0.45);
             transition: all 0.3s;
+
             &:not(:last-child) {
               margin-right: 40px;
             }
           }
         }
-        .copyright {
-          color: rgba(0, 0, 0, 0.45);
-          font-size: 14px;
-        }
+
       }
     }
 

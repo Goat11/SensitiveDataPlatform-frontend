@@ -45,7 +45,8 @@ import {
   Descriptions,
   Space,
   message,
-  notification
+  notification,
+  Carousel
 } from 'ant-design-vue'
 import Viser from 'viser-vue'
 
@@ -87,6 +88,7 @@ Vue.use(Drawer)
 Vue.use(Tooltip)
 Vue.use(Alert)
 Vue.use(Tag)
+Vue.use(Carousel)
 Vue.use(Divider)
 Vue.use(DatePicker)
 Vue.use(TimePicker)

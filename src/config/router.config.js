@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
@@ -13,8 +14,72 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/home',
     children: [
+      // home
+      {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/home/HomePage'),
+        meta: { title: '首页', icon: 'home', keepAlive: true, permission: ['home'] }
+      },
+      
+      // 用户管理
+      {
+        path: '/userManage',
+        name: 'userManage',
+        component: RouteView,
+        redirect: '/userManage/PermissionManage',
+        meta: { title: '用户管理', icon: 'user', permission: ['userManage'] },
+        children: [
+        // 权限管理
+          {
+            path: '/userManage/PermissionManage',
+            name: 'PermissionManage',
+            component: () => import('@/views/userManage/PermissionManage'),
+            meta: { title: '用户权限管理', keepAlive: true, permission: ['userManage'] }
+          },
+          // 权限查看与申请
+          {
+            path: '/userManage/PermissionApply',
+            name: 'PermissionApply',
+            component: () => import('@/views/userManage/PermissionApply'),
+            meta: { title: '权限查看与申请', keepAlive: true, permission: ['userManage'] }
+          }
+        ]
+      },
+      // 数据管理：（1）数据查看 （2）数据托管 （3）数据导出
+      {
+        path: '/dataManage',
+        name: 'dataManage',
+        component: RouteView,
+        redirect: '',
+        meta: { title: '数据管理', icon: 'database', permission: ['dataManage'] },
+        children: [
+          // 数据查看
+          {
+            path: '/dataManage/DataView',
+            name: 'DataView',
+            component: () => import('@/views/dataManage/DataView'),
+            meta: { title: '数据查看', keepAlive: true, permission: ['dataManage'] }
+          },
+          // 数据托管
+          {
+            path: '/dataManage/DataTrusteeship',
+            name: 'DataTrusteeship',
+            component: () => import('@/views/dataManage/DataTrusteeship'),
+            meta: { title: '数据托管', keepAlive: true, permission: ['dataManage'] }
+          },
+          // 数据导出
+          {
+            path: '/dataManage/DataExport',
+            name: 'DataExport',
+            component: () => import('@/views/dataManage/DataExport'),
+            meta: { title: '数据导出', keepAlive: true, permission: ['dataManage'] }
+          }
+        ]
+      },
+
       // dashboard
       {
         path: '/dashboard',
