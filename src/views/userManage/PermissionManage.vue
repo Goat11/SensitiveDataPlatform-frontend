@@ -23,7 +23,8 @@
                             </a-col>
                             <a-col :md="8" :sm="24">
                                 <a-form-item>
-                                    <a-button type="primary" @click="handleSearch">查询</a-button>
+                                    <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
+                                    <a-button style="margin-left: 8px" @click="resetQuery">重置</a-button>
                                 </a-form-item>
                             </a-col>
                             <a-col :md="8" :sm="24">
@@ -35,7 +36,14 @@
                         </a-row>
                     </a-form>
                     <a-table :columns="columns" :dataSource="data" :pagination="pagination" rowKey="id"
-                        @change="handleTableChange" :rowSelection="rowSelection"></a-table>
+                        @change="handleTableChange" :rowSelection="rowSelection">
+                        <template #action="{ text, record }">
+                            <a @click="handleEdit(record)">同意</a>
+                            <a-divider type="vertical" />
+                            <a @click="handleSub(record)">拒绝</a>
+                            <a-divider type="vertical" />
+                            <a @click="handleSub(record)">撤销</a>
+                        </template></a-table>
                 </a-card>
             </a-layout-content>
         </a-layout>
