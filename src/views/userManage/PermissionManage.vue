@@ -35,8 +35,12 @@
                             </a-col>
                         </a-row>
                     </a-form>
-                    <a-table :columns="columns" :dataSource="data" :pagination="pagination" rowKey="id"
-                        @change="handleTableChange" :rowSelection="rowSelection">
+                    <a-table :columns="columns"
+:dataSource="data"
+:pagination="pagination"
+rowKey="id"
+                        @change="handleTableChange"
+:rowSelection="rowSelection">
                         <template #action="{ text, record }">
                             <a @click="handleEdit(record)">同意</a>
                             <a-divider type="vertical" />

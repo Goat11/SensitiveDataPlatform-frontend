@@ -1,105 +1,85 @@
 <template>
-  <page-header-wrapper>
+  <page-header-wrapper :title="false">
     <template v-slot:content>
-      <div class="page-header-content">
-        <div class="avatar">
-          <a-avatar size="large" :src="currentUser.avatar" />
-        </div>
-        <div class="content">
-          <div class="content-title">
-            {{ timeFix }}，{{ user.name }}<span class="welcome-text">{{ welcome }}</span>
-          </div>
-        </div>
+      <div class="page-header-content" style="margin-top: 10px;">
+        <a-row :gutter="24">
+          <a-col :xl="1" :lg="24" :md="24" :sm="24" :xs="24">
+            <div class="avatar">
+              <a-avatar size="large" :src="currentUser.avatar" />
+            </div>
+          </a-col>
+          <a-col :xl="10"
+                 :lg="24"
+                 :md="24"
+                 :sm="24"
+                 :xs="24"
+                 style="margin-left: 20px;">
+            <div class="content">
+              <div style="font-size: 16px; font-weight: bold;">
+                <!-- {{ timeFix }},{{ user.name }} <span class="welcome-text">{{ welcome }}</span> -->
+                {{ timeFix }}, GOAT <span class="welcome-text">{{ welcome }}</span>
+              </div>
+              <div>
+                XX企业xx部门xx岗位
+                <!-- {{ user.description }} -->
+              </div>
+            </div>
+          </a-col>
+        </a-row>
       </div>
     </template>
     <!-- <template v-slot:extraContent>
-      <div class="extra-content">
-        <div class="stat-item">
-          <a-statistic title="项目数" :value="56" />
-        </div>
-        <div class="stat-item">
-          <a-statistic title="团队内排名" :value="8" suffix="/ 24" />
-        </div>
-        <div class="stat-item">
-          <a-statistic title="项目访问" :value="2223" />
-        </div>
+      <div class="user-stats">
+        <a-row :gutter="4">
+          <a-col :span="8">
+            <a-statistic title="粉丝" :value="user.followerCount">
+            </a-statistic>
+          </a-col>
+          <a-col :span="8">
+            <a-statistic title="文章" :value="user.postCount ? user.postCount : 105">
+            </a-statistic>
+          </a-col>
+          <a-col :span="8">
+            <a-statistic title="文章" :value="user.postCount ? user.postCount : 105">
+            </a-statistic>
+          </a-col>
+        </a-row>
       </div>
     </template> -->
-
     <div>
       <a-row :gutter="24">
-        <a-col :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
+        <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24">
+
           <a-card class="project-list"
                   :loading="loading"
-                  style="margin-bottom: 24px;"
+                  style="margin-bottom: 24px; "
                   :bordered="false"
-                  title="(跑马灯图)"
                   :body-style="{ padding: 0 }">
-            <a-image :width="200" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" />
             <div>
-              <a-image src="https://bpic.51yuansu.com/pic3/cover/03/10/94/5b46c2f7931fe_610.jpg" />
-            </div>
-            <div>
-              <a-carousel autoplay>
+              <a-carousel autoplay :dots="false">
                 <div>
-                  <a-image src="../../../public/1.jpg" />
+                  <img src="@/assets/1.jpg" style="width: 100%; height: 200px;" />
                 </div>
                 <div>
-                  <a-image src="../../../public/2.jpg" />
+                  <img src="@/assets/2.jpg" style="width: 100%; height: 200px;" />
                 </div>
                 <div>
-                  <a-image src="../../../public/logo.png" />
+                  <img src="@/assets/3.jpg" style="width: 100%; height: 200px;" />
                 </div>
-                <!-- <div v-for="(item, index) in imageList" :key="index">
-                  <a-image :src="item" />
-                </div> -->
               </a-carousel>
             </div>
-            <!-- <a slot="extra">全部项目</a>
-            <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
-                <a-card :bordered="false" :body-style="{ padding: 0 }">
-                  <a-card-meta>
-                    <div slot="title" class="card-title">
-                      <a-avatar size="small" :src="item.cover" />
-                      <a>{{ item.title }}</a>
-                    </div>
-                    <div slot="description" class="card-description">
-                      {{ item.description }}
-                    </div>
-                  </a-card-meta>
-                  <div class="project-item">
-                    <a href="/#/">科学搬砖组</a>
-                    <span class="datetime">9小时前</span>
-                  </div>
-                </a-card>
-              </a-card-grid>
-            </div> -->
+          </a-card>
+          <a-card :loading="loading" title="通知" :bordered="false" style="height:246px;overflow-y: auto;">
           </a-card>
 
-          <a-card :loading="loading" title="通知" :bordered="false">
-            <!-- <a-list>
-              <a-list-item :key="index" v-for="(item, index) in activities">
-                <a-list-item-meta>
-                  <a-avatar slot="avatar" size="small" :src="item.user.avatar" />
-                  <div slot="title">
-                    <span>{{ item.user.nickname }}</span>&nbsp; 在&nbsp;<a href="#">{{ item.project.name
-                    }}</a>&nbsp; <span>{{ item.project.action }}</span>&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
-                  </div>
-                  <div slot="description">{{ item.time }}</div>
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list> -->
-          </a-card>
         </a-col>
-        <a-col style="padding: 0 12px"
-               :xl="16"
+        <a-col :xl="14"
                :lg="24"
                :md="24"
                :sm="24"
-               :xs="24">
-          <a-card title="快速开始" style="margin-bottom: 24px" :bordered="false" :body-style="{ padding: 0 }">
+               :xs="24"
+               style="padding: 0 12px;">
+          <a-card title="快速开始" style="margin-bottom: 24px;" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <a>用户管理</a>
               <a>数据导入</a>
@@ -107,29 +87,13 @@
               <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
             </div>
           </a-card>
-          <a-card title="上次登陆"
-                  style="margin-bottom: 24px"
-                  :loading="radarLoading"
-                  :bordered="false"
-                  :body-style="{ padding: 0 }">
-            <!-- <div style="min-height: 400px;">
-              <radar :data="radarData" />
-            </div> -->
-            <div>登陆时间：2023-05-08</div>
-            <div>登陆IP：192.168.2</div>
+
+          <a-card title="上次登录" :bordered="false" :loading="radarLoading" style="margin-bottom: 24px;">
+            <div style="font-size:16px;margin-bottom:10px;">登录时间：2023-05-08</div>
+            <div style="font-size:16px;">登录IP：192.168.1.1</div>
           </a-card>
-          <a-card :loading="loading" title="系统介绍" :bordered="false">
-            这是一个基于白盒FPE/OPE的敏感数据服务平台
-            <!-- <div class="members">
-              <a-row>
-                <a-col :span="12" v-for="(item, index) in teams" :key="index">
-                  <a>
-                    <a-avatar size="small" :src="item.avatar" />
-                    <span class="member">{{ item.name }}</span>
-                  </a>
-                </a-col>
-              </a-row>
-            </div> -->
+          <a-card title="系统介绍" :bordered="false" :loading="loading">
+            <div style="font-size:16px;">这是一个基于白盒FPE/OPE的敏感数据服务平台</div>
           </a-card>
         </a-col>
       </a-row>
@@ -155,13 +119,6 @@ export default {
   },
   data() {
     return {
-
-      imageList: [
-        '../../public/1.jpg',
-        '../../public/2.jpg',
-        '../../public/logo.png'
-      ],
-
       timeFix: timeFix(),
       avatar: '',
       user: {},
