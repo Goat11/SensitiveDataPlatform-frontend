@@ -17,8 +17,11 @@
                         <a-row>
                             <a-col :md="24">
                                 <a-form-item :wrapper-col="{ span: 24 }">
-                                    <a-select style="max-width: 268px; width: 100%;" mode="multiple" placeholder="输入数据库名称"
-                                        v-decorator="['owner']" @change="handleChange">
+                                    <a-select style="max-width: 268px; width: 100%;"
+mode="multiple"
+placeholder="输入数据库名称"
+                                        v-decorator="['owner']"
+@change="handleChange">
                                         <a-select-option v-for="item in owners" :key="item.id">{{ item.name
                                         }}</a-select-option>
                                     </a-select>
@@ -52,8 +55,11 @@
                     </standard-form-row>
                 </a-form>
             </a-card>
-            <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
-                class="card-list" style="margin-top: 20px;">
+            <a-list rowKey="id"
+:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
+:dataSource="dataSource"
+                class="card-list"
+style="margin-top: 20px;">
                 <a-list-item slot="renderItem" slot-scope="item">
                     <template v-if="!item || item.id === undefined">
                         <a-button class="new-btn" type="dashed">
