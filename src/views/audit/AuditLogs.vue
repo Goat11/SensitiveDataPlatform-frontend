@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <a-table :columns="columns" :data-source="data" :pagination="pagination"></a-table>
-  </div>
+  <page-header-wrapper title="审计日志管理">
+    <div>
+      <a-table :columns="columns" :data-source="data" :pagination="pagination"></a-table>
+    </div>
+  </page-header-wrapper>
 </template>
 
 <script>

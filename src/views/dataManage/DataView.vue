@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
-    <page-header-wrapper :title="false">
+    <page-header-wrapper :title="数据查看">
         <div>
             <a-card :bordered="false" class="ant-pro-components-tag-select">
                 <a-form :form="form" layout="inline">

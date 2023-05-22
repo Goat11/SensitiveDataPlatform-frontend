@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
-    <page-header-wrapper :title="false">
+    <page-header-wrapper :title="数据托管">
         <a-card :body-style="{ padding: '24px 32px' }" :bordered="false">
             <a-form @submit="handleSubmit" :form="form">
                 <a-form-item :label="$t('数据库名称')"

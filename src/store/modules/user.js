@@ -87,7 +87,7 @@ const user = {
               role.permissionList = ['home', 'userManage', 'dataManage', 'audit', 'dashboard']
             } else if (result.roleType === 1 || result.roleType === '1') {
               role = { id: 'user', name: '授权用户', permissions: [{ 'roleId': 'user', 'permissionId': 'user' }] }
-              role.permissionList = ['home', 'userManage', 'dataManage']
+              role.permissionList = ['home', 'userManage', 'userManage_user', 'dataManage']
             } else if (result.roleType === 2 || result.roleType === '2') {
               role = { id: 'visit', name: '访客', permission: [{ 'roleId': 'visit', 'permissionId': 'visit' }] }
               role.permissionList = ['home', 'userManage', 'dataManage']

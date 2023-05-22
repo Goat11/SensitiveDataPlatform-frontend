@@ -31,19 +31,19 @@ export const asyncRouterMap = [
         redirect: '/userManage/PermissionManage',
         meta: { title: '用户管理', icon: 'user', permission: ['userManage'] },
         children: [
-        // 权限管理
+          // 权限管理
           {
             path: '/userManage/PermissionManage',
             name: 'PermissionManage',
             component: () => import('@/views/userManage/PermissionManage'),
-            meta: { title: '用户权限管理', keepAlive: true, permission: ['userManage'] }
+            meta: { title: '用户权限管理', keepAlive: true, permission: ['userManage_admin'] }
           },
           // 权限查看与申请
           {
             path: '/userManage/PermissionApply',
             name: 'PermissionApply',
             component: () => import('@/views/userManage/PermissionApply'),
-            meta: { title: '权限查看与申请', keepAlive: true, permission: ['userManage'] }
+            meta: { title: '权限查看与申请', keepAlive: true, permission: ['userManage_user'] }
           }
         ]
       },
@@ -97,7 +97,7 @@ export const asyncRouterMap = [
         redirect: '/audit/AuditLogs',
         meta: { title: '审计管理', icon: 'audit', permission: ['audit'] },
         children: [
-        // 系统日志查询
+          // 系统日志查询
           {
             path: '/audit/AuditLogs',
             name: 'AuditLogs',
