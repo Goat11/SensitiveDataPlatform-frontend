@@ -84,13 +84,13 @@ const user = {
             let role = {}
             if (result.roleType === 0 || result.roleType === '0') {
               role = { id: 'admin', name: '管理员', permissions: [{ 'roleId': 'admin', 'permissionId': 'admin' }] }
-              role.permissionList = ['home', 'userManage', 'dataManage', 'audit', 'dashboard']
+              role.permissionList = ['home', 'userManage', 'userManage_admin', 'dataManage', 'dataManage_DataTrusteeship', 'dataManage_DataDetail', 'audit']
             } else if (result.roleType === 1 || result.roleType === '1') {
               role = { id: 'user', name: '授权用户', permissions: [{ 'roleId': 'user', 'permissionId': 'user' }] }
-              role.permissionList = ['home', 'userManage', 'userManage_user', 'dataManage']
+              role.permissionList = ['home', 'userManage', 'userManage_user', 'dataManage', 'dataManage_DataTrusteeship', 'dataManage_DataDetail']
             } else if (result.roleType === 2 || result.roleType === '2') {
               role = { id: 'visit', name: '访客', permission: [{ 'roleId': 'visit', 'permissionId': 'visit' }] }
-              role.permissionList = ['home', 'userManage', 'dataManage']
+              role.permissionList = ['home', 'userManage', 'userManage_user', 'dataManage', 'dataManage_DataDetail']
             }
             commit('SET_ROLES', role)
             result.role = role

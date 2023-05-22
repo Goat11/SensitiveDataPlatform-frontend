@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper :title="false">
+  <page-header-wrapper :title="数据详细">
     <a-layout>
       <a-card>
         <a-layout-sider width="250" style="background-color:white;">

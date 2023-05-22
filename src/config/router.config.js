@@ -77,7 +77,7 @@ export const asyncRouterMap = [
             path: '/dataManage/DataTrusteeship',
             name: 'DataTrusteeship',
             component: () => import('@/views/dataManage/DataTrusteeship'),
-            meta: { title: '数据托管', keepAlive: true, permission: ['dataManage'] }
+            meta: { title: '数据托管', keepAlive: true, permission: ['dataManage_DataTrusteeship'] }
           },
           // 数据详细
           {
@@ -85,7 +85,7 @@ export const asyncRouterMap = [
             name: 'DataDetail',
             hidden: true,
             component: () => import('@/views/dataManage/DataDetail'),
-            meta: { title: '数据详细', keepAlive: true, permission: ['dataManage'] }
+            meta: { title: '数据详细', keepAlive: true, permission: ['dataManage_DataDetail'] }
           }
         ]
       },
