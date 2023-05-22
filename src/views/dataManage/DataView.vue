@@ -17,11 +17,8 @@
                         <a-row>
                             <a-col :md="24">
                                 <a-form-item :wrapper-col="{ span: 24 }">
-                                    <a-select style="max-width: 268px; width: 100%;"
-mode="multiple"
-placeholder="输入数据库名称"
-                                        v-decorator="['owner']"
-@change="handleChange">
+                                    <a-select style="max-width: 268px; width: 100%;" mode="multiple" placeholder="输入数据库名称"
+                                        v-decorator="['owner']" @change="handleChange">
                                         <a-select-option v-for="item in owners" :key="item.id">{{ item.name
                                         }}</a-select-option>
                                     </a-select>
@@ -55,12 +52,9 @@ placeholder="输入数据库名称"
                     </standard-form-row>
                 </a-form>
             </a-card>
-            <a-list rowKey="id"
-:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
-:dataSource="dataSource"
-                class="card-list"
-style="margin-top: 20px;">
-                <a-list-item slot="renderItem" slot-scope="item" @click="DataDetail(item)">
+            <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
+                class="card-list" style="margin-top: 20px;">
+                <a-list-item slot="renderItem" slot-scope="item">
                     <template v-if="!item || item.id === undefined">
                         <a-button class="new-btn" type="dashed">
                             <a-icon type="plus" />
@@ -75,8 +69,8 @@ style="margin-top: 20px;">
                                 <div class="meta-content" slot="description">{{ item.content }}</div>
                             </a-card-meta>
                             <template class="ant-card-actions" slot="actions">
-                                <a>原始数据</a>
-                                <a>脱敏数据</a>
+                                <a @click="handleClick">原始数据</a>
+                                <a @click="DataDetail(item)">脱敏数据</a>
                             </template>
                         </a-card>
                     </template>
@@ -170,6 +164,16 @@ export default {
         this.getList()
     },
     methods: {
+        handleClick() {
+            // 这里可以根据实际情况检查用户权限，这里仅做示例
+            // const hasPermission = false
+            // const result = response.data
+            // commit('SET_ROLETYPE', result.roleType)
+            // if (result.roleType === 2 || result.roleType === '2') {
+            //     this.$message.error('您没有访问权限！')
+            // }
+            this.$message.error('您没有访问权限！')
+        },
         DataDetail(Data) {
             router.push({
                 name: 'DataDetail',
