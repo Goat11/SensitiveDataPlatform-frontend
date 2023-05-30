@@ -3,6 +3,8 @@
     <page-header-wrapper :title="数据查看">
         <div>
             <a-card :bordered="false" class="ant-pro-components-tag-select">
+                <textarea v-model="query" style="width: 1000px;margin-right: 15px;" placeholder="请输入您要执行的SQL语句" ></textarea>
+                <button @click="executeQuery">执行</button>
                 <a-form :form="form" layout="inline">
                     <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
                         <a-form-item>
@@ -17,11 +19,8 @@
                         <a-row>
                             <a-col :md="24">
                                 <a-form-item :wrapper-col="{ span: 24 }">
-                                    <a-select style="max-width: 268px; width: 100%;"
-mode="multiple"
-placeholder="输入数据库名称"
-                                        v-decorator="['owner']"
-@change="handleChange">
+                                    <a-select style="max-width: 268px; width: 100%;" mode="multiple" placeholder="请输入数据库名称"
+                                        v-decorator="['owner']" @change="handleChange">
                                         <a-select-option v-for="item in owners" :key="item.id">{{ item.name
                                         }}</a-select-option>
                                     </a-select>
@@ -55,11 +54,8 @@ placeholder="输入数据库名称"
                     </standard-form-row>
                 </a-form>
             </a-card>
-            <a-list rowKey="id"
-:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
-:dataSource="dataSource"
-                class="card-list"
-style="margin-top: 20px;">
+            <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
+                class="card-list" style="margin-top: 20px;">
                 <a-list-item slot="renderItem" slot-scope="item">
                     <template v-if="!item || item.id === undefined">
                         <a-button class="new-btn" type="dashed">
@@ -89,6 +85,7 @@ style="margin-top: 20px;">
 <script>
 import { TagSelect, StandardFormRow, ArticleListContent } from '@/components'
 import router from '@/router/index'
+import axios from 'axios'
 // import IconText from './IconText'
 const TagSelectOption = TagSelect.Option
 
@@ -106,44 +103,28 @@ dataSource.push({
     content: '医疗信息数据库。'
 })
 dataSource.push({
-    id: 2,
-    title: '医疗信息数据库2',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '医疗信息数据库2'
-})
-dataSource.push({
     id: 3,
     title: '购物信息数据库',
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
     content: '购物信息数据库'
 })
-dataSource.push({
-    id: 4,
-    title: '购物信息数据库2',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '购物信息数据库2'
-})
 
 const owners = [
     {
-        id: 'wzj',
-        name: '我自己'
+        id: 'student',
+        name: '学生类'
     },
     {
-        id: 'wjh',
-        name: '吴家豪'
+        id: 'shopping',
+        name: '购物类'
     },
     {
-        id: 'zxx',
-        name: '周星星'
+        id: 'hospital',
+        name: '医疗类'
     },
     {
-        id: 'zly',
-        name: '赵丽颖'
-    },
-    {
-        id: 'ym',
-        name: '姚明'
+        id: 'others',
+        name: '其他'
     }
 ]
 
@@ -163,7 +144,9 @@ export default {
             loading: true,
             loadingMore: false,
             data: [],
-            form: this.$form.createForm(this)
+            form: this.$form.createForm(this),
+            query: '',
+            result: null
         }
     },
     mounted() {
@@ -209,6 +192,15 @@ export default {
             setFieldsValue({
                 owner: ['wzj']
             })
+        },
+        executeQuery() {
+            axios.post('/api/execute-sql', { query: this.query })
+                .then(response => {
+                    this.result = response.data
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     }
 }
