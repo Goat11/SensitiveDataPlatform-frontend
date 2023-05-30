@@ -102,17 +102,17 @@ dataSource.push({
     content: '医疗信息数据库。'
 })
 dataSource.push({
-    id: 3,
+    id: 2,
     title: '购物信息数据库',
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
     content: '购物信息数据库'
 })
-// dataSource.push({
-//     id: 4,
-//     title: '新增数据库',
-//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-//     content: '点击新增数据库'
-// })
+dataSource.push({
+    id: 3,
+    title: '新增数据库',
+    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+    content: '点击新增数据库'
+})
 const owners = [
     {
         id: 'student',

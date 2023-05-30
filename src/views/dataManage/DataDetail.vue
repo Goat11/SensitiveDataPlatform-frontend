@@ -1,21 +1,21 @@
 <template>
-  <page-header-wrapper :title="数据详细">
-    <a-layout>
-      <a-card>
-        <a-layout-sider width="250" style="background-color:white;">
-          <h3>数据库结构</h3>
-          <a-tree :show-line="true" @select="onSelect" :tree-data="treeData" :defaultExpandAll="true">
-          </a-tree>
-        </a-layout-sider>
-      </a-card>
-      <a-card style="width: 100%; margin-left: 20px;">
-        <a-layout-content style="margin-left: 30px;">
-          <h3>{{ tableName }}</h3>
-          <a-table :data-source="tableData" :columns="columns" :row-key="record => record.key"></a-table>
-        </a-layout-content>
-      </a-card>
-    </a-layout>
-  </page-header-wrapper>
+    <page-header-wrapper :title="数据详细">
+        <a-layout>
+            <a-card>
+                <a-layout-sider width="250" style="background-color:white;">
+                    <h3>数据库结构</h3>
+                    <a-tree :show-line="true" @select="onSelect" :tree-data="treeData" :defaultExpandAll="true">
+                    </a-tree>
+                </a-layout-sider>
+            </a-card>
+            <a-card style="width: 100%; margin-left: 20px;">
+                <a-layout-content style="margin-left: 30px;">
+                    <h3>{{ tableName }}</h3>
+                    <a-table :data-source="tableData" :columns="columns" :row-key="record => record.key"></a-table>
+                </a-layout-content>
+            </a-card>
+        </a-layout>
+    </page-header-wrapper>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ export default {
     components: { ALayout: Layout, ALayoutSider: Layout.Sider, ALayoutContent: Layout.Content, ATree: Tree, ATable: Table },
     data() {
         return {
-            DataID: parseInt(this.$route.params.userID),
+            // DataID: parseInt(this.$route.params.userID)
             treeData: [
                 {
                     title: '学生信息数据库',
@@ -42,6 +42,10 @@ export default {
             tableData: [],
             columns: []
         }
+    },
+    mounted() {
+        const id = this.$route.params.id
+        this.getTableData(id)
     },
     methods: {
         onSelect(selectedKeys, info) {
