@@ -3,8 +3,8 @@
     <page-header-wrapper :title="数据查看">
         <div>
             <a-card :bordered="false" class="ant-pro-components-tag-select">
-                <textarea v-model="query" style="width: 1000px;margin-right: 15px;" placeholder="请输入您要执行的SQL语句" ></textarea>
-                <button @click="executeQuery">执行</button>
+                <textarea v-model="query" style="width: 1000px;margin-right: 15px;" placeholder="请输入您要执行的SQL语句"></textarea>
+                <a-button @click="executeQuery">执行</a-button>
                 <a-form :form="form" layout="inline">
                     <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
                         <a-form-item>
@@ -29,7 +29,6 @@
                             </a-col>
                         </a-row>
                     </standard-form-row>
-
                     <standard-form-row title="其它选项" grid last>
                         <a-row :gutter="16">
                             <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
@@ -108,7 +107,12 @@ dataSource.push({
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
     content: '购物信息数据库'
 })
-
+// dataSource.push({
+//     id: 4,
+//     title: '新增数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '点击新增数据库'
+// })
 const owners = [
     {
         id: 'student',
@@ -166,6 +170,12 @@ export default {
         DataDetail(Data) {
             router.push({
                 name: 'DataDetail',
+                params: { id: Data.id }
+            })
+        },
+        DataTrusteeship(Data) {
+            router.push({
+                name: 'DataTrusteeship',
                 params: { id: Data.id }
             })
         },
