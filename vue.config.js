@@ -41,6 +41,13 @@ const assetsCDN = {
 // vue.config.js
 const vueConfig = {
   configureWebpack: {
+    performance: {
+      hints: 'warning',
+      // 入口起点的最大体积
+      maxEntrypointSize: 1024 * 1024 * 1024,
+      // 生成文件的最大体积
+      maxAssetSize: 1024 * 1024 * 1024
+    },
     // webpack plugins
     plugins: [
       // Ignore all locale files of moment.js

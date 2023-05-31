@@ -1,68 +1,22 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
     <page-header-wrapper :title="数据查看">
+        <template v-slot:content>
+            <div class="button-wrapper">
+                <a-button class="primary" type="dashed" @click="DataTrusteeship">
+                    <a-icon type="plus" />
+                    导入新数据
+                </a-button>
+            </div>
+        </template>
         <div>
-            <a-card :bordered="false" class="ant-pro-components-tag-select">
-                <textarea v-model="query" style="width: 1000px;margin-right: 15px;" placeholder="请输入您要执行的SQL语句"></textarea>
-                <a-button @click="executeQuery">执行</a-button>
-                <a-form :form="form" layout="inline">
-                    <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
-                        <a-form-item>
-                            <tag-select>
-                                <tag-select-option value="Category2">学生类</tag-select-option>
-                                <tag-select-option value="Category3">医疗类</tag-select-option>
-                                <tag-select-option value="Category4">购物类</tag-select-option>
-                            </tag-select>
-                        </a-form-item>
-                    </standard-form-row>
-                    <standard-form-row title="数据库" grid>
-                        <a-row>
-                            <a-col :md="24">
-                                <a-form-item :wrapper-col="{ span: 24 }">
-                                    <a-select style="max-width: 268px; width: 100%;" mode="multiple" placeholder="请输入数据库名称"
-                                        v-decorator="['owner']" @change="handleChange">
-                                        <a-select-option v-for="item in owners" :key="item.id">{{ item.name
-                                        }}</a-select-option>
-                                    </a-select>
-                                    <a class="list-articles-trigger" @click="setOwner">只看自己的</a>
-                                </a-form-item>
-                            </a-col>
-                        </a-row>
-                    </standard-form-row>
-                    <standard-form-row title="其它选项" grid last>
-                        <a-row :gutter="16">
-                            <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
-                                <a-form-item label="数据库平台" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
-                                    <a-select placeholder="不限" style="max-width: 200px; width: 100%;">
-                                        <a-select-option value="MySQL">MySQL</a-select-option>
-                                        <a-select-option value="达梦">达梦</a-select-option>
-                                    </a-select>
-                                </a-form-item>
-                            </a-col>
-                            <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
-                                <a-form-item label="年份" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
-                                    <a-select placeholder="不限" style="max-width: 200px; width: 100%;">
-                                        <a-select-option value="2023">2023</a-select-option>
-                                        <a-select-option value="2022">2022</a-select-option>
-                                        <a-select-option value="2021">2021</a-select-option>
-                                        <a-select-option value="2020">2020</a-select-option>
-                                    </a-select>
-                                </a-form-item>
-                            </a-col>
-                        </a-row>
-                    </standard-form-row>
-                </a-form>
-            </a-card>
-            <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
-                class="card-list" style="margin-top: 20px;">
+            <a-list rowKey="id"
+:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
+:dataSource="dataSource"
+                class="card-list"
+style="margin-top: 20px;">
                 <a-list-item slot="renderItem" slot-scope="item">
-                    <template v-if="!item || item.id === undefined">
-                        <a-button class="new-btn" type="dashed">
-                            <a-icon type="plus" />
-                            导入新数据
-                        </a-button>
-                    </template>
-                    <template v-else>
+                    <template>
                         <a-card :hoverable="true">
                             <a-card-meta>
                                 <a slot="title">{{ item.title }}</a>
@@ -77,6 +31,25 @@
                     </template>
                 </a-list-item>
             </a-list>
+            <a-card :bordered="false" class="ant-pro-components-tag-select">
+                <div class="sql-query-heading">SQL查询</div>
+                <a-row>
+                    <a-col span="18">
+                        <a-textarea v-model="query" placeholder="请输入您要执行的SQL语句" :autoSize="{ minRows: 4 }"></a-textarea>
+                    </a-col>
+                    <a-col span="6" class="sql-query-button">
+                        <a-button type="primary" @click="executeQuery">执行</a-button>
+                    </a-col>
+                </a-row>
+            </a-card>
+            <a-card v-if="queryResult" :bordered="false" class="sql-query-result">
+                <div class="sql-query-heading">查询结果</div>
+                <a-list :dataSource="queryResult" class="query-result-list">
+                    <a-list-item slot="renderItem" slot-scope="item">
+                        <div>{{ item }}</div>
+                    </a-list-item>
+                </a-list>
+            </a-card>
         </div>
     </page-header-wrapper>
 </template>
@@ -107,12 +80,7 @@ dataSource.push({
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
     content: '购物信息数据库'
 })
-dataSource.push({
-    id: 3,
-    title: '新增数据库',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '点击新增数据库'
-})
+
 const owners = [
     {
         id: 'student',
@@ -150,7 +118,7 @@ export default {
             data: [],
             form: this.$form.createForm(this),
             query: '',
-            result: null
+            queryResult: ''
         }
     },
     mounted() {
@@ -173,10 +141,9 @@ export default {
                 params: { id: Data.id }
             })
         },
-        DataTrusteeship(Data) {
+        DataTrusteeship() {
             router.push({
-                name: 'DataTrusteeship',
-                params: { id: Data.id }
+                name: 'DataTrusteeship'
             })
         },
         handleChange(value) {
@@ -206,7 +173,7 @@ export default {
         executeQuery() {
             axios.post('/api/execute-sql', { query: this.query })
                 .then(response => {
-                    this.result = response.data
+                    this.queryResult = response.data
                 })
                 .catch(error => {
                     console.log(error)
@@ -217,7 +184,6 @@ export default {
 </script>
 <style lang='less' scoped>
 @import '~ant-design-vue/lib/style/themes/default.less';
-@import "~@/components/index.less";
 
 .ant-pro-components-tag-select {
     :deep(.ant-pro-tag-select .ant-tag) {
@@ -299,5 +265,52 @@ export default {
     border-radius: 2px;
     width: 100%;
     height: 188px;
+}
+
+.page-header-wrapper {
+    padding: 20px;
+}
+
+.primary {
+    margin-bottom: 10px;
+}
+
+.button-wrapper {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.card-list {
+    margin-top: 20px;
+}
+
+.card-avatar {
+    margin-bottom: 10px;
+}
+
+.meta-content {
+    margin-top: 10px;
+}
+
+.ant-card-actions {
+    margin-top: 10px;
+}
+
+.sql-query-heading {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.sql-query-button {
+    padding-left: 10px;
+}
+
+.sql-query-result {
+    margin-top: 20px;
+}
+
+.query-result-list {
+    margin-top: 10px;
 }
 </style>

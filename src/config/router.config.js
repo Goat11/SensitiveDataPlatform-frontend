@@ -52,32 +52,25 @@ export const asyncRouterMap = [
         path: '/dataManage',
         name: 'dataManage',
         component: RouteView,
-        redirect: '',
-        meta: { title: '数据管理', icon: 'database', keepAlive: true, permission: ['dataManage'] },
-        children: [
+        redirect: '/dataManage/DataView',
+        hideChildrenInMenu: true,
+        meta: { title: '数据管理', icon: 'database', hideHeader: true, keepAlive: true, permission: ['dataManage'] },
+        children: [ 
           // 数据查看
           {
             path: '/dataManage/DataView',
             name: 'DataView',
             component: () => import('@/views/dataManage/DataView'),
-            hideChildrenInMenu: true,
+            hidden: true,
             meta: { title: '数据查看', hideHeader: true, keepAlive: true, permission: ['dataManage'] }
-            // children: [
-            //   // 数据查看-数据详细
-            //   {
-            //     path: '/dataManage/DataView/DataDetail',
-            //     name: 'DataDetail',
-            //     component: () => import('@/views/dataManage/DataDetail'),
-            //     meta: { title: '数据详细', keepAlive: true, permission: ['dataManage'], hidden: true }
-            //   }
-            // ]
           },
           // 数据托管
           {
             path: '/dataManage/DataTrusteeship',
             name: 'DataTrusteeship',
+            hidden: true,
             component: () => import('@/views/dataManage/DataTrusteeship'),
-            meta: { title: '数据托管', keepAlive: true, permission: ['dataManage_DataTrusteeship'] }
+            meta: { title: '数据托管', keepAlive: true, permission: ['dataManage'] }
           },
           // 数据详细
           {
@@ -85,7 +78,7 @@ export const asyncRouterMap = [
             name: 'DataDetail',
             hidden: true,
             component: () => import('@/views/dataManage/DataDetail'),
-            meta: { title: '数据详细', keepAlive: true, permission: ['dataManage_DataDetail'] }
+            meta: { title: '数据详细', keepAlive: true, permission: ['dataManage'] }
           }
         ]
       },

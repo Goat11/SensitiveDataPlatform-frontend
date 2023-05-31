@@ -50,11 +50,7 @@
       <a-row :gutter="24">
         <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24">
 
-          <a-card class="project-list"
-                  :loading="loading"
-                  style="margin-bottom: 24px; "
-                  :bordered="false"
-                  :body-style="{ padding: 0 }">
+          <a-card class="project-list" style="margin-bottom: 24px; " :bordered="false" :body-style="{ padding: 0 }">
             <div>
               <a-carousel autoplay :dots="false">
                 <div>
@@ -69,7 +65,7 @@
               </a-carousel>
             </div>
           </a-card>
-          <a-card :loading="loading" title="通知" :bordered="false" style="height:246px;overflow-y: auto;">
+          <a-card title="通知" :bordered="false" style="height:246px;overflow-y: auto;">
           </a-card>
 
         </a-col>
@@ -88,11 +84,11 @@
             </div>
           </a-card>
 
-          <a-card title="上次登录" :bordered="false" :loading="radarLoading" style="margin-bottom: 24px;">
+          <a-card title="上次登录" :bordered="false" style="margin-bottom: 24px;">
             <div style="font-size:16px;margin-bottom:10px;">登录时间：2023-05-08</div>
             <div style="font-size:16px;">登录IP：192.168.1.1</div>
           </a-card>
-          <a-card title="系统介绍" :bordered="false" :loading="loading">
+          <a-card title="系统介绍" :bordered="false">
             <div style="font-size:16px;">这是一个基于白盒FPE/OPE的敏感数据服务平台</div>
           </a-card>
         </a-col>
