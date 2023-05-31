@@ -10,11 +10,8 @@
             </div>
         </template>
         <div>
-            <a-list rowKey="id"
-:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
-:dataSource="dataSource"
-                class="card-list"
-style="margin-top: 20px;">
+            <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
+                class="card-list" style="margin-top: 20px;">
                 <a-list-item slot="renderItem" slot-scope="item">
                     <template>
                         <a-card :hoverable="true">

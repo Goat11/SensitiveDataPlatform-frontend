@@ -8,12 +8,7 @@
               <a-avatar size="large" :src="currentUser.avatar" />
             </div>
           </a-col>
-          <a-col :xl="10"
-                 :lg="24"
-                 :md="24"
-                 :sm="24"
-                 :xs="24"
-                 style="margin-left: 20px;">
+          <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" style="margin-left: 20px;">
             <div class="content">
               <div style="font-size: 16px; font-weight: bold;">
                 <!-- {{ timeFix }},{{ user.name }} <span class="welcome-text">{{ welcome }}</span> -->
@@ -65,16 +60,21 @@
               </a-carousel>
             </div>
           </a-card>
-          <a-card title="通知" :bordered="false" style="height:246px;overflow-y: auto;">
+          <a-card :loading="loading" title="消息列表" :bordered="false" style="height:450px;overflow-y: auto;">
+            <div class="notification-list">
+            </div>
+            <div v-if="notifications.length === 0" class="no-data">暂无数据</div>
+            <div v-else>
+              <div v-for="(item, index) in notifications" :key="index" class="notification-item">
+                <div class="notification-header">{{ item.title }}</div>
+                <div class="notification-content">{{ item.content }}</div>
+                <div class="notification-time">{{ item.time }}</div>
+              </div>
+            </div>
           </a-card>
 
         </a-col>
-        <a-col :xl="14"
-               :lg="24"
-               :md="24"
-               :sm="24"
-               :xs="24"
-               style="padding: 0 12px;">
+        <a-col :xl="14" :lg="24" :md="24" :sm="24" :xs="24" style="padding: 0 12px;">
           <a-card title="快速开始" style="margin-bottom: 24px;" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <a>用户管理</a>
@@ -124,7 +124,26 @@ export default {
       radarLoading: true,
       activities: [],
       teams: [],
-
+      // message
+      unreadMessageCount: 3,
+      unfinishedTaskCount: 5,
+      notifications: [
+        {
+          title: '权限申请',
+          content: 'xx公司xxx用户申请访问xxx数据库表xx字段。',
+          time: '2023-05-30 10:12:30'
+        },
+        {
+          title: '权限过期提醒',
+          content: '您的xxx数据库xx权限还有2小时过期，请注意使用时间。',
+          time: '2023-05-29 14:20:05'
+        },
+        {
+          title: '系统公告',
+          content: 'xx用户上传xxx数据库（脱敏版本），敬请查看。',
+          time: '2023-05-28 09:30:12'
+        }
+      ],
       // data
       axis1Opts: {
         dataKey: 'item',
@@ -365,5 +384,51 @@ export default {
 
 .ant-carousel :deep(.slick-slide h3) {
   color: #fff;
+}
+
+.notification-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.notification-list a-badge {
+  cursor: pointer;
+}
+
+.notification-list a-badge:hover {
+  background-color: #eee;
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #999;
+  font-size: 16px;
+}
+
+.notification-item {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.notification-header {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.notification-content {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #999;
 }
 </style>
