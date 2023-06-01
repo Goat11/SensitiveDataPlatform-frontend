@@ -207,6 +207,7 @@ export default {
     }),
     currentUser () {
       return {
+        // 这里用户name需要调用login_api获取用户名（后面再改）
         name: 'Serati Ma',
         avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }

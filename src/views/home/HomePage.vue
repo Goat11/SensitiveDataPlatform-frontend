@@ -77,16 +77,17 @@
         <a-col :xl="14" :lg="24" :md="24" :sm="24" :xs="24" style="padding: 0 12px;">
           <a-card title="快速开始" style="margin-bottom: 24px;" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
-              <a>用户管理</a>
+              <!-- 添加点击事件 -->
+              <a @click="PermissionManage(item)">用户管理</a>
               <a>数据导入</a>
               <a>数据查看</a>
               <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
             </div>
           </a-card>
-
+          <!--  这块等有空换成审计的接口，只是暂时写死 -->
           <a-card title="上次登录" :bordered="false" style="margin-bottom: 24px;">
-            <div style="font-size:16px;margin-bottom:10px;">登录时间：2023-05-08</div>
-            <div style="font-size:16px;">登录IP：192.168.1.1</div>
+            <div style="font-size:16px;margin-bottom:10px;">登录时间：2023-06-01</div>
+            <div style="font-size:16px;">登录IP：123.139.56.77</div>
           </a-card>
           <a-card title="系统介绍" :bordered="false">
             <div style="font-size:16px;">这是一个基于白盒FPE/OPE的敏感数据服务平台</div>
@@ -102,8 +103,9 @@ import { timeFix } from '@/utils/util'
 import { mapState } from 'vuex'
 import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
-
+import router from '@/router/index'
 import { getRoleList, getServiceList } from '@/api/manage'
+// import PermissionManage from '../userManage/PermissionManage.vue'
 
 const DataSet = require('@antv/data-set')
 
@@ -130,17 +132,17 @@ export default {
       notifications: [
         {
           title: '权限申请',
-          content: 'xx公司xxx用户申请访问xxx数据库表xx字段。',
-          time: '2023-05-30 10:12:30'
+          content: '航天公司张晓明用户申请访问【学生信息】数据库表【籍贯】字段。',
+          time: '2023-06-01 10:12:30'
         },
         {
           title: '权限过期提醒',
-          content: '您的xxx数据库xx权限还有2小时过期，请注意使用时间。',
+          content: '您的【医疗信息】数据库【就诊医生】字段权限还有2小时过期，请注意使用时间。',
           time: '2023-05-29 14:20:05'
         },
         {
           title: '系统公告',
-          content: 'xx用户上传xxx数据库（脱敏版本），敬请查看。',
+          content: '吴大宽用户上传了【购物信息】数据库（脱敏版本），敬请查看。',
           time: '2023-05-28 09:30:12'
         }
       ],
@@ -192,7 +194,8 @@ export default {
     }),
     currentUser() {
       return {
-        name: 'Serati Ma',
+        // 这里用户name需要调用login_api获取用户名（后面再改）
+        name: '管理员',
         avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }
     },
@@ -249,6 +252,12 @@ export default {
 
         this.radarData = dv.rows
         this.radarLoading = false
+      })
+    },
+    PermissionManage(Data) {
+      router.push({
+        name: 'PermissionManage',
+        params: { id: Data.id }
       })
     }
   }

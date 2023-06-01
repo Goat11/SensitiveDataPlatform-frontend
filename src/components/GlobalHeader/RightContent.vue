@@ -50,6 +50,7 @@ export default {
   mounted () {
     setTimeout(() => {
       this.currentUser = {
+        // 这里用户name需要调用login_api获取用户名（后面再改）
         name: 'Serati Ma'
       }
     }, 1500)

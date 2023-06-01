@@ -3,22 +3,16 @@
     <h3><span>{{ $t('user.register.register') }}</span></h3>
     <a-form ref="formRegister" :form="form" id="formRegister">
       <a-form-item>
-        <a-input size="large"
-                 type="text"
-                 :placeholder="$t('user.login.userName')"
-                 v-decorator="['username', { rules: [{ required: true, type: 'username', message: $t('user.username.required') }], validateTrigger: ['change', 'blur'] }]"></a-input>
+        <a-input size="large" type="text" :placeholder="$t('user.login.userName')"
+          v-decorator="['username', { rules: [{ required: true, type: 'username', message: $t('user.username.required') }], validateTrigger: ['change', 'blur'] }]"></a-input>
       </a-form-item>
       <a-form-item>
-        <a-input size="large"
-                 type="text"
-                 :placeholder="$t('user.register.email.placeholder')"
-                 v-decorator="['email', { rules: [{ required: true, type: 'email', message: $t('user.email.required') }], validateTrigger: ['change', 'blur'] }]"></a-input>
+        <a-input size="large" type="text" :placeholder="$t('user.register.email.placeholder')"
+          v-decorator="['email', { rules: [{ required: true, type: 'email', message: $t('user.email.required') }], validateTrigger: ['change', 'blur'] }]"></a-input>
       </a-form-item>
 
-      <a-popover placement="rightTop"
-                 :trigger="['focus']"
-                 :getPopupContainer="(trigger) => trigger.parentElement"
-                 v-model="state.passwordLevelChecked">
+      <a-popover placement="rightTop" :trigger="['focus']" :getPopupContainer="(trigger) => trigger.parentElement"
+        v-model="state.passwordLevelChecked">
         <template slot="content">
           <div :style="{ width: '240px' }">
             <div :class="['user-register', passwordLevelClass]">{{ $t(passwordLevelName) }}</div>
@@ -30,17 +24,15 @@
           </div>
         </template>
         <a-form-item>
-          <a-input-password size="large"
-                            @click="handlePasswordInputClick"
-                            :placeholder="$t('user.register.password.placeholder')"
-                            v-decorator="['password', { rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur'] }]"></a-input-password>
+          <a-input-password size="large" @click="handlePasswordInputClick"
+            :placeholder="$t('user.register.password.placeholder')"
+            v-decorator="['password', { rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur'] }]"></a-input-password>
         </a-form-item>
       </a-popover>
 
       <a-form-item>
-        <a-input-password size="large"
-                          :placeholder="$t('user.register.confirm-password.placeholder')"
-                          v-decorator="['password2', { rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur'] }]"></a-input-password>
+        <a-input-password size="large" :placeholder="$t('user.register.confirm-password.placeholder')"
+          v-decorator="['password2', { rules: [{ required: true, message: $t('user.password.required') }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur'] }]"></a-input-password>
       </a-form-item>
 
       <!-- 输入手机号 -->
@@ -64,31 +56,21 @@
       <a-row :gutter="16">
         <a-col class="gutter-row" :span="16">
           <a-form-item>
-            <a-input size="large"
-                     type="text"
-                     :placeholder="$t('user.login.mobile.verification-code.placeholder')"
-                     v-decorator="['captcha', { rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur' }]">
+            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')"
+              v-decorator="['captcha', { rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur' }]">
               <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
         </a-col>
         <a-col class="gutter-row" :span="8">
-          <a-button class="getCaptcha"
-                    size="large"
-                    :disabled="state.smsSendBtn"
-                    @click.stop.prevent="getCaptcha"
-                    v-text="!state.smsSendBtn && $t('user.register.get-verification-code') || (state.time + ' s')"></a-button>
+          <a-button class="getCaptcha" size="large" :disabled="state.smsSendBtn" @click.stop.prevent="getCaptcha"
+            v-text="!state.smsSendBtn && $t('user.register.get-verification-code') || (state.time + ' s')"></a-button>
         </a-col>
       </a-row>
 
       <a-form-item>
-        <a-button size="large"
-                  type="primary"
-                  htmlType="submit"
-                  class="register-button"
-                  :loading="registerBtn"
-                  @click.stop.prevent="handleSubmit"
-                  :disabled="registerBtn">{{ $t('user.register.register') }}
+        <a-button size="large" type="primary" htmlType="submit" class="register-button" :loading="registerBtn"
+          @click.stop.prevent="handleSubmit" :disabled="registerBtn">{{ $t('user.register.register') }}
         </a-button>
         <router-link class="login" :to="{ name: 'login' }">{{ $t('user.register.sign-in') }}</router-link>
       </a-form-item>
@@ -98,7 +80,8 @@
 </template>
 
 <script>
-import { getSmsCaptcha } from '@/api/login'
+// 注册页面现在还没真正接入login_api的接口，后面可以处理一下
+import { getSmsCaptcha } from '@/api/login_api'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
 
@@ -208,6 +191,7 @@ export default {
 
     handleSubmit() {
       const { form: { validateFields }, state, $router } = this
+      this.$message.success('注册成功！')
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false
