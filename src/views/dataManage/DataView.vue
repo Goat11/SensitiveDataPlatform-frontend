@@ -72,7 +72,7 @@ dataSource.push({
     id: 1,
     title: '医疗信息数据库',
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '医疗信息数据库。'
+    content: '医疗信息数据库'
 })
 dataSource.push({
     id: 2,
