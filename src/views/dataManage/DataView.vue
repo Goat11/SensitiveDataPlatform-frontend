@@ -2,20 +2,55 @@
 <template>
     <page-header-wrapper :title="数据查看">
         <template v-slot:content>
-            <div class="button-wrapper">
-                <a-button class="primary" type="dashed" @click="DataTrusteeship">
-                    <a-icon type="plus" />
-                    导入新数据
-                </a-button>
-            </div>
         </template>
         <div>
+            <a-card :bordered="false" class="ant-pro-components-tag-select">
+                <a-form :form="form" layout="inline">
+                    <standard-form-row grid last>
+                        <a-row :gutter="[0, 20]">
+                            <a-col :md="8" :sm="24">
+                                <div class="form-item-inline">
+                                    <span>数据库名称:</span>
+                                    <a-form-item :wrapper-col="{ span: 24 }">
+                                        <a-input-search style="max-width: 268px; width: 100%;" placeholder="请输入数据库名称"
+                                            v-decorator="['owner']" @search="handleSearch" />
+                                    </a-form-item>
+                                </div>
+                            </a-col>
+                            <a-col :md="8" :sm="24">
+                                <div class="form-item-inline">
+                                    <span>数据库类型:</span>
+                                    <a-form-item :wrapper-col="{ span: 24 }">
+                                        <a-select placeholder="不限" style="width: 200px;">
+                                            <a-select-option value="MySQL">MySQL</a-select-option>
+                                            <a-select-option value="达梦">达梦</a-select-option>
+                                            <a-select-option value="Oracle">Oracle</a-select-option>
+                                        </a-select>
+                                    </a-form-item>
+                                </div>
+                            </a-col>
+                            <a-col :md="8" :sm="24">
+                                <a-form-item>
+                                    <a-button type="primary">查询</a-button>
+                                    <a-button style="margin-left: 8px" @click="resetQuery">重置</a-button>
+                                </a-form-item>
+                            </a-col>
+                        </a-row>
+                    </standard-form-row>
+                </a-form>
+            </a-card>
             <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
                 class="card-list" style="margin-top: 20px;">
                 <a-list-item slot="renderItem" slot-scope="item">
-                    <template>
+                    <template v-if="!item || item.id === undefined">
+                        <a-button class="new-btn" type="dashed" @click="DataTrusteeship">
+                            <a-icon type="plus" />
+                            导入新数据
+                        </a-button>
+                    </template>
+                    <template v-else>
                         <a-card :hoverable="true">
-                            <a-card-meta>
+                            <a-card-meta @click="DataDetail(item)">
                                 <a slot="title">{{ item.title }}</a>
                                 <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" />
                                 <div class="meta-content" slot="description">{{ item.content }}</div>
@@ -54,11 +89,16 @@
 <script>
 import { TagSelect, StandardFormRow, ArticleListContent } from '@/components'
 import router from '@/router/index'
-import axios from 'axios'
 // import IconText from './IconText'
 const TagSelectOption = TagSelect.Option
 
 const dataSource = []
+dataSource.push({
+    // id: 0, // 不写id，表示是新增按钮
+    title: '导入新数据',
+    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+    content: '导入新数据'
+})
 dataSource.push({
     id: 0,
     title: '学生信息数据库',
@@ -166,15 +206,6 @@ export default {
             setFieldsValue({
                 owner: ['wzj']
             })
-        },
-        executeQuery() {
-            axios.post('/api/execute-sql', { query: this.query })
-                .then(response => {
-                    this.queryResult = response.data
-                })
-                .catch(error => {
-                    console.log(error)
-                })
         }
     }
 }
@@ -261,7 +292,7 @@ export default {
     background-color: #fff;
     border-radius: 2px;
     width: 100%;
-    height: 188px;
+    height: 200px;
 }
 
 .page-header-wrapper {
@@ -309,5 +340,15 @@ export default {
 
 .query-result-list {
     margin-top: 10px;
+}
+
+.form-item-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.form-item-inline span {
+    margin-right: 8px;
 }
 </style>

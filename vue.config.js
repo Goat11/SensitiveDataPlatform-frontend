@@ -127,7 +127,7 @@ const vueConfig = {
       }
     }
   },
-
+  publicPath: './',
   devServer: {
     // development server port 8000
     port: 8000
