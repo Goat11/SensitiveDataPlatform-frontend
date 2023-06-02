@@ -33,25 +33,25 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       showMenu: true,
       currentUser: {}
     }
   },
   computed: {
-    wrpCls () {
+    wrpCls() {
       return {
         'ant-pro-global-header-index-right': true,
         [`ant-pro-global-header-index-${(this.isMobile || !this.topMenu) ? 'light' : this.theme}`]: true
       }
     }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
       this.currentUser = {
         // 这里用户name需要调用login_api获取用户名（后面再改）
-        name: 'Serati Ma'
+        name: this.$store.getters.userID
       }
     }, 1500)
   }
