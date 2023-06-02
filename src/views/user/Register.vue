@@ -98,7 +98,8 @@
 </template>
 
 <script>
-import { getSmsCaptcha } from '@/api/login'
+// 注册页面现在还没真正接入login_api的接口，后面可以处理一下
+import { getSmsCaptcha } from '@/api/login_api'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
 
@@ -208,6 +209,7 @@ export default {
 
     handleSubmit() {
       const { form: { validateFields }, state, $router } = this
+      this.$message.success('注册成功！')
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false

@@ -2,6 +2,7 @@ import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import { login, getInfo, logout } from '@/api/login_api'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { secToTime, exportIP } from '@/utils/util'
 
 storage.addPlugin(expirePlugin)
 const user = {
@@ -9,6 +10,8 @@ const user = {
     token: '',
     name: '',
     userID: '',
+    loginIP: '',
+    loginTime: '',
     roleType: '',
     email: '',
     welcome: '',
@@ -27,6 +30,12 @@ const user = {
     },
     SET_USERID: (state, userID) => {
       state.userID = userID
+    },
+    SET_LOGINTIME: (state, loginTime) => {
+      state.loginTime = loginTime
+    },
+    SET_LOGINIP: (state, loginIP) => {
+      state.loginIP = loginIP
     },
     SET_EMAIL: (state, email) => {
       state.email = email
@@ -79,6 +88,8 @@ const user = {
             // result.role = role
             const result = response.data
             commit('SET_USERID', result.userID)
+            commit('SET_LOGINIP', exportIP(result.LoginIP))
+            commit('SET_LOGINTIME', secToTime(result.LoginTime))
             commit('SET_EMAIL', result.email)
             commit('SET_ROLETYPE', result.roleType)
             let role = {}

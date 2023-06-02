@@ -70,7 +70,7 @@ export const asyncRouterMap = [
             name: 'DataTrusteeship',
             hidden: true,
             component: () => import('@/views/dataManage/DataTrusteeship'),
-            meta: { title: '数据托管', keepAlive: true, permission: ['dataManage'] }
+            meta: { title: '敏感数据管理', keepAlive: true, permission: ['dataManage'] }
           },
           // 数据详细
           {

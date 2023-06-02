@@ -207,16 +207,17 @@ export default {
     }),
     currentUser () {
       return {
-        name: 'Serati Ma',
+        // 这里用户name需要调用login_api获取用户名（后面再改）
+        name: 'Orall',
         avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }
     },
     userInfo () {
-      return this.$store.getters.userInfo
+      return this.$store.getters.userName
     }
   },
   created () {
-    this.user = this.userInfo
+    this.user = this.userName
     this.avatar = this.userInfo.avatar
 
     getRoleList().then(res => {

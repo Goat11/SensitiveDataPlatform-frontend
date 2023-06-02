@@ -22,16 +22,20 @@
                     </a-row>
                 </a-card>
                 <a-card v-if="queryResult" :bordered="false" class="sql-query-result">
-                    <div class="sql-query-heading">查询结果</div>
-                    <a-list :dataSource="queryResult" class="query-result-list">
-                        <a-list-item slot="renderItem" slot-scope="item">
-                            <div>{{ item }}</div>
-                        </a-list-item>
-                    </a-list>
+                    <template>
+                        <page-header-wrapper title="">
+                            <div class="sql-query-heading">查询结果</div>
+                            <a-list :dataSource="queryResult" class="query-result-list">
+                                <a-list-item slot="renderItem" slot-scope="item">
+                                    <div>{{ item }}</div>
+                                </a-list-item>
+                            </a-list>
+                        </page-header-wrapper>
+                    </template>
                 </a-card>
                 <a-layout-content style="margin-left: 30px;">
-                    <h3>{{ tableName }}</h3>
-                    <a-table :data-source="tableData" :columns="columns" :row-key="record => record.key"></a-table>
+                    <!-- <a-table :data-source="tableData" :columns="columns" :row-key="record => record.key"></a-table> -->
+                    <a-table :columns="columns" :data-source="data" :pagination="pagination"></a-table>
                 </a-layout-content>
             </a-card>
         </a-layout>
@@ -39,36 +43,56 @@
 </template>
 
 <script>
-import { Layout, Tree, Table } from 'ant-design-vue'
+import { Layout, Tree, Table, Pagination } from 'ant-design-vue'
 import axios from 'axios'
+import { getMedInsurance } from '@/api/data'
+
+function generateColumns(data) {
+    if (!data || data.length === 0) {
+        return []
+    }
+    const firstRecord = data[0]
+    const columns = []
+
+    for (const key in firstRecord) {
+        if (firstRecord.hasOwnProperty(key)) {
+            const column = {
+                title: key,
+                dataIndex: key,
+                align: 'center'
+            }
+            columns.push(column)
+        }
+    }
+    return columns
+}
 
 export default {
     name: 'DataDetail',
-    components: { ALayout: Layout, ALayoutSider: Layout.Sider, ALayoutContent: Layout.Content, ATree: Tree, ATable: Table },
+    components: { ALayout: Layout, ALayoutSider: Layout.Sider, ALayoutContent: Layout.Content, ATree: Tree, ATable: Table, 'a-pagination': Pagination },
     data() {
         return {
             // DataID: parseInt(this.$route.params.userID)
-            treeData: [
-                {
-                    title: '学生信息数据库',
-                    name: '数据库',
-                    key: 'database',
-                    children: [
-                        { name: '学生表', key: 'table1', title: '学生表' },
-                        { name: '成绩表', key: 'table2', title: '成绩表' }
-                    ]
-                }
-            ],
-            tableName: '',
-            tableData: [],
-            columns: [],
             query: '',
-            queryResult: null
+            queryResult: null,
+            columns: [],
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+                total: 0,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                pageSizeOptions: ['10'],
+                onChange: this.handlePageSizeChange,
+                onShowSizeChange: this.handlePageSizeChange
+            }
         }
     },
     mounted() {
         const id = this.$route.params.id
-        this.getTableData(id)
+        console.log('DataID:', id)
+        this.getList()
     },
     methods: {
         executeQuery() {
@@ -82,34 +106,62 @@ export default {
         },
         onSelect(selectedKeys, info) {
             console.log('selected', selectedKeys, info)
-            if (selectedKeys[0] === 'table1') {
-                this.tableName = '学生表'
-                this.columns = [
-                    { title: '学号', dataIndex: 'id', key: 'id' },
-                    { title: '姓名', dataIndex: 'name', key: 'name' },
-                    { title: '性别', dataIndex: 'gender', key: 'gender' },
-                    { title: '班级', dataIndex: 'class', key: 'class' }
-                ]
-                this.tableData = [
-                    { key: '1', id: '001', name: '张三', gender: '男', class: '一班' },
-                    { key: '2', id: '002', name: '李四', gender: '女', class: '二班' }
-                ]
-            } else if (selectedKeys[0] === 'table2') {
-                this.tableName = '成绩表'
-                this.columns = [
-                    { title: '学号', dataIndex: 'id', key: 'id' },
-                    { title: '课程', dataIndex: 'course', key: 'course' },
-                    { title: '成绩', dataIndex: 'score', key: 'score' }
-                ]
-                this.tableData = [
-                    { key: '1', id: '001', course: '数学', score: '89' },
-                    { key: '2', id: '002', course: '数学', score: '95' }
-                ]
-            } else {
-                this.tableName = ''
-                this.columns = []
-                this.tableData = []
-            }
+            // if (selectedKeys[0] === 'table1') {
+            //     this.tableName = '学生表'
+            //     this.columns = [
+            //         { title: '学号', dataIndex: 'id', key: 'id' },
+            //         { title: '姓名', dataIndex: 'name', key: 'name' },
+            //         { title: '性别', dataIndex: 'gender', key: 'gender' },
+            //         { title: '班级', dataIndex: 'class', key: 'class' }
+            //     ]
+            //     this.tableData = [
+            //         { key: '1', id: '001', name: '张三', gender: '男', class: '一班' },
+            //         { key: '2', id: '002', name: '李四', gender: '女', class: '二班' }
+            //     ]
+            // } else if (selectedKeys[0] === 'table2') {
+            //     this.tableName = '成绩表'
+            //     this.columns = [
+            //         { title: '学号', dataIndex: 'id', key: 'id' },
+            //         { title: '课程', dataIndex: 'course', key: 'course' },
+            //         { title: '成绩', dataIndex: 'score', key: 'score' }
+            //     ]
+            //     this.tableData = [
+            //         { key: '1', id: '001', course: '数学', score: '89' },
+            //         { key: '2', id: '002', course: '数学', score: '95' }
+            //     ]
+            // } else {
+            //     this.tableName = ''
+            //     this.columns = []
+            //     this.tableData = []
+            // }
+        },
+        handlePageSizeChange(page, pageSize) {
+            this.pagination.current = page
+            this.pagination.pageSize = pageSize
+            this.loading = true
+            this.getList()
+        },
+        getList() {
+            const params = {}
+            params['page'] = this.pagination.current
+            params['pageSize'] = this.pagination.pageSize
+            params['orderBy'] = 'time DESC'
+            params['token'] = this.$store.getters.token
+            getMedInsurance(params).then(res => {
+                if (res.msg === '请求成功') {
+                    this.data = res.data
+                    this.pagination.total = res.data.length
+                    this.columns = generateColumns(res.data)
+                    // debug
+                    console.log('columns:', this.columns)
+                    console.log('data:', this.data)
+                } else {
+                    console.error('请求失败')
+                }
+                this.loading = false
+            }).catch(error => {
+                this.requestFailed(error)
+            })
         }
     }
 }

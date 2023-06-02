@@ -12,10 +12,8 @@
                                 <div class="form-item-inline">
                                     <span>数据库名称:</span>
                                     <a-form-item :wrapper-col="{ span: 24 }">
-                                        <a-input-search style="max-width: 268px; width: 100%;"
-placeholder="请输入数据库名称"
-                                            v-decorator="['owner']"
-@search="handleSearch" />
+                                        <a-input-search style="max-width: 268px; width: 100%;" placeholder="请输入数据库名称"
+                                            v-decorator="['owner']" @search="handleSearch" />
                                     </a-form-item>
                                 </div>
                             </a-col>
@@ -41,11 +39,8 @@ placeholder="请输入数据库名称"
                     </standard-form-row>
                 </a-form>
             </a-card>
-            <a-list rowKey="id"
-:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
-:dataSource="dataSource"
-                class="card-list"
-style="margin-top: 20px;">
+            <a-list rowKey="id" :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }" :dataSource="dataSource"
+                class="card-list" style="margin-top: 20px;">
                 <a-list-item slot="renderItem" slot-scope="item">
                     <template v-if="!item || item.id === undefined">
                         <a-button class="new-btn" type="dashed" @click="DataTrusteeship">
@@ -114,7 +109,7 @@ dataSource.push({
     id: 1,
     title: '医疗信息数据库',
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '医疗信息数据库。'
+    content: '医疗信息数据库'
 })
 dataSource.push({
     id: 2,
