@@ -155,7 +155,7 @@ export default {
             data: [],
             form: this.$form.createForm(this),
             query: '',
-            queryResult: ''
+            queryResult: null
         }
     },
     mounted() {
