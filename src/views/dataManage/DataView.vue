@@ -63,25 +63,6 @@
                     </template>
                 </a-list-item>
             </a-list>
-            <a-card :bordered="false" class="ant-pro-components-tag-select">
-                <div class="sql-query-heading">SQL查询</div>
-                <a-row>
-                    <a-col span="18">
-                        <a-textarea v-model="query" placeholder="请输入您要执行的SQL语句" :autoSize="{ minRows: 4 }"></a-textarea>
-                    </a-col>
-                    <a-col span="6" class="sql-query-button">
-                        <a-button type="primary" @click="executeQuery">执行</a-button>
-                    </a-col>
-                </a-row>
-            </a-card>
-            <a-card v-if="queryResult" :bordered="false" class="sql-query-result">
-                <div class="sql-query-heading">查询结果</div>
-                <a-list :dataSource="queryResult" class="query-result-list">
-                    <a-list-item slot="renderItem" slot-scope="item">
-                        <div>{{ item }}</div>
-                    </a-list-item>
-                </a-list>
-            </a-card>
         </div>
     </page-header-wrapper>
 </template>
@@ -100,12 +81,6 @@ dataSource.push({
     content: '导入新数据'
 })
 dataSource.push({
-    id: 0,
-    title: '学生信息数据库',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '学生信息数据库'
-})
-dataSource.push({
     id: 1,
     title: '医疗信息数据库',
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
@@ -117,25 +92,12 @@ dataSource.push({
     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
     content: '购物信息数据库'
 })
-
-const owners = [
-    {
-        id: 'student',
-        name: '学生类'
-    },
-    {
-        id: 'shopping',
-        name: '购物类'
-    },
-    {
-        id: 'hospital',
-        name: '医疗类'
-    },
-    {
-        id: 'others',
-        name: '其他'
-    }
-]
+dataSource.push({
+    id: 3,
+    title: '学生信息数据库',
+    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+    content: '学生信息数据库'
+})
 
 export default {
     name: 'DataView',
@@ -149,13 +111,10 @@ export default {
     data() {
         return {
             dataSource,
-            owners,
             loading: true,
             loadingMore: false,
             data: [],
-            form: this.$form.createForm(this),
-            query: '',
-            queryResult: null
+            form: this.$form.createForm(this)
         }
     },
     mounted() {
@@ -185,27 +144,6 @@ export default {
         },
         handleChange(value) {
             console.log(`selected ${value}`)
-        },
-        getList() {
-            this.$http.get('/list/article').then(res => {
-                console.log('res', res)
-                this.data = res.result
-                this.loading = false
-            })
-        },
-        loadMore() {
-            this.loadingMore = true
-            this.$http.get('/list/article').then(res => {
-                this.data = this.data.concat(res.result)
-            }).finally(() => {
-                this.loadingMore = false
-            })
-        },
-        setOwner() {
-            const { form: { setFieldsValue } } = this
-            setFieldsValue({
-                owner: ['wzj']
-            })
         }
     }
 }

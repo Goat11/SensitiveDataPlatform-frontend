@@ -7,17 +7,89 @@ const userApi = {
     MedPatientInfo: '/api/medical/patientInfo',
     ShopOrderList: 'api/shopping/orderList',
     ShopUserList: '/api/shopping/userList',
-    ShopPayList: '/api/shopping/payList?token=eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNqqViotTi3ydFGyUipOziuNrypR0lEqLk0C8tNL8-PzMkvjcxOBQpmJJUpWhmYWpiamJoYGRjpKqRUFEAFTEwNTA6NaAAAAAP__.4eTqP0N6wU8lv4vD0L8A3gszaoH_xIyn-zplHmyRP7Y',
-    StuRewardPunishment: '/api/stuInfo/rewardPunishment?token=eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNqqViotTi3ydFGyUipOziuNrypR0lEqLk0C8tNL8-PzMkvjcxOBQpmJJUpWhmYWpiamJoYGRjpKqRUFEAFTEwNTA6NaAAAAAP__.4eTqP0N6wU8lv4vD0L8A3gszaoH_xIyn-zplHmyRP7Y',
+    ShopPayList: '/api/shopping/payList',
+    StuRewardPunishment: '/api/stuInfo/rewardPunishment',
     StuScoreList: '/api/stuInfo/scoreList',
-    StuStatus: '/api/stuInfo/status?token=eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNqqViotTi3ydFGyUipOziuNrypR0lEqLk0C8tNL8-PzMkvjcxOBQpmJJUpWhmYWpiamJoYGRjpKqRUFEAFTEwNTA6NaAAAAAP__.4eTqP0N6wU8lv4vD0L8A3gszaoH_xIyn-zplHmyRP7Y',
-    StuInfoList: '/api/stuInfo/infoList?token=eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNqqViotTi3ydFGyUipOziuNrypR0lEqLk0C8tNL8-PzMkvjcxOBQpmJJUpWhmYWpiamJoYGRjpKqRUFEAFTEwNTA6NaAAAAAP__.4eTqP0N6wU8lv4vD0L8A3gszaoH_xIyn-zplHmyRP7Y'
+    StuStatus: '/api/stuInfo/status',
+    StuInfoList: '/api/stuInfo/infoList'
 
 }
 
 export function getMedInsurance(parameter) {
   return request({
     url: userApi.MedInsurance,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getMedicalList(parameter) {
+  return request({
+    url: userApi.MedicalList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getMedPatientInfo(parameter) {
+  return request({
+    url: userApi.MedPatientInfo,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getShopOrderList(parameter) {
+  return request({
+    url: userApi.ShopOrderList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getShopUserList(parameter) {
+  return request({
+    url: userApi.ShopUserList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getShopPayList(parameter) {
+  return request({
+    url: userApi.ShopPayList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getStuRewardPunishment(parameter) {
+  return request({
+    url: userApi.StuRewardPunishment,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getStuScoreList(parameter) {
+  return request({
+    url: userApi.StuScoreList,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getStuStatus(parameter) {
+  return request({
+    url: userApi.StuStatus,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getStuInfoList(parameter) {
+  return request({
+    url: userApi.StuInfoList,
     method: 'get',
     params: parameter
   })
