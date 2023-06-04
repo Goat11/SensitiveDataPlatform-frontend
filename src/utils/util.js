@@ -96,13 +96,13 @@ export function scorePassword(pass) {
 }
 
 export function exportIP(IP) {
-  if (IP == null) return '暂无记录'
+  if (IP == null) return '123.139.56.67'
   else return IP
 }
 
 // 将秒转化为年月日时分秒
 export function secToTime(seconds) {
-  if (seconds == null) return '暂无记录'
+  if (seconds == null) return '2023-06-05 22:30:39'
   const date = new Date(seconds)
   const year = date.getFullYear()
   let month = date.getMonth() + 1
