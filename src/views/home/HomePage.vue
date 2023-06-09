@@ -78,9 +78,9 @@
           <a-card title="快速开始" style="margin-bottom: 24px;" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <!-- 添加点击事件 -->
-              <a @click="PermissionManage(item)">用户管理</a>
-              <a>数据导入</a>
-              <a>数据查看</a>
+              <a @click="PermissionManage()">用户管理</a>
+              <a @click="DataTrusteeship()">数据导入</a>
+              <a @click="DataView()">数据查看</a>
               <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
             </div>
           </a-card>
@@ -256,10 +256,22 @@ export default {
         this.radarLoading = false
       })
     },
-    PermissionManage(Data) {
+    PermissionManage() {
       router.push({
-        name: 'PermissionManage',
-        params: { id: Data.id }
+        name: 'PermissionManage'
+        // params: { id: item.id }
+      })
+    },
+    DataTrusteeship() {
+      router.push({
+        name: 'DataTrusteeship'
+        // params: { id: item.id }
+      })
+    },
+    DataView() {
+      router.push({
+        name: 'DataView'
+        // params: { id: item.id }
       })
     }
   }
