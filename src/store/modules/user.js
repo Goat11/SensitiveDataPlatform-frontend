@@ -12,6 +12,8 @@ const user = {
     userID: '',
     loginIP: '',
     loginTime: '',
+    lastLoginTime: '',
+    lastLoginIP: '',
     roleType: '',
     email: '',
     welcome: '',
@@ -30,6 +32,12 @@ const user = {
     },
     SET_USERID: (state, userID) => {
       state.userID = userID
+    },
+    SET_LASTLOGINTIME: (state, lastLoginTime) => {
+      state.lastLoginTime = lastLoginTime
+    },
+    SET_LASTLOGINIP: (state, lastLoginIP) => {
+      state.lastLoginIP = lastLoginIP
     },
     SET_LOGINTIME: (state, loginTime) => {
       state.loginTime = loginTime
@@ -90,6 +98,8 @@ const user = {
             commit('SET_USERID', result.userID)
             commit('SET_LOGINIP', exportIP(result.LoginIP))
             commit('SET_LOGINTIME', secToTime(result.LoginTime))
+            commit('SET_LASTLOGINIP', exportIP(result.lastLoginIP))
+            commit('SET_LASTLOGINTIME', secToTime(result.lastLoginTime))
             commit('SET_EMAIL', result.email)
             commit('SET_ROLETYPE', result.roleType)
             let role = {}

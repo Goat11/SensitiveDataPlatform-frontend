@@ -2,20 +2,32 @@
   <page-header-wrapper title="审计日志管理">
     <div>
       <a-table :columns="columns" :data-source="data" :pagination="pagination">
-        <span slot="action" slot-scope="text, record">
+        <span slot="operation" slot-scope="text, record">
           <template>
-            <a @click="detailSyslog(record)">查看</a>
-            <a-divider type="vertical" />
-            <a @click="deleteOne(record.ID)">删除</a>
+            <a @click="detailSyslog(record)">查看详情</a>
           </template>
         </span>
       </a-table>
+      <!-- <a-modal ref="createModal" :visible="visible" title="日志详情" @ok="handleOk" @cancel="handleCancel">
+        <div style="margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="font-size: 20px; color: #333;">『{{ detail.module }}』</h3>
+            <span style="font-size: 14px; color: #999;">{{ formatDate(detail.logTime) }} | {{ detail.operator }}</span>
+          </div>
+          <div style="font-size: 16px; line-height: 1.5; color: #666; margin-bottom: 5px;">
+            <p>（1）条件：{{ detail.conditions }}</p>
+            <p>（2）结果：{{ detail.result }}</p>
+            <p>（3）行为：{{ detail.action }}</p>
+            <p>（4）状态：{{ detail.status }}</p>
+          </div>
+        </div>
+      </a-modal> -->
     </div>
   </page-header-wrapper>
 </template>
 
 <script>
-import { Table, Pagination } from 'ant-design-vue'
+import { Table, Pagination, Modal } from 'ant-design-vue'
 import { getList } from '@/api/auditLog_api'
 const columns = [
   {
@@ -70,7 +82,8 @@ export default {
   name: 'AuditLogs',
   components: {
     'a-table': Table,
-    'a-pagination': Pagination
+    'a-pagination': Pagination,
+    'a-modal': Modal
   },
   data() {
     this.columns = columns
@@ -110,6 +123,17 @@ export default {
         this.loading = false
       }).catch(error => {
         this.requestFailed(error)
+      })
+    },
+    detailSyslog(record) {
+      // console.log(record)
+      // this.mdl = null
+      // this.visible = true
+      // this.detail = { ...record }
+      Modal.info({
+        title: '详细信息',
+        // 查看日志详情这里还要修改
+        content: <p>${record.module}</p>
       })
     }
   }

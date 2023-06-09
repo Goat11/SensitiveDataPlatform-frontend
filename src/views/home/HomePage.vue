@@ -8,12 +8,7 @@
               <a-avatar size="large" :src="currentUser.avatar" />
             </div>
           </a-col>
-          <a-col :xl="10"
-                 :lg="24"
-                 :md="24"
-                 :sm="24"
-                 :xs="24"
-                 style="margin-left: 20px;">
+          <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" style="margin-left: 20px;">
             <div class="content">
               <div style="font-size: 16px; font-weight: bold;">
                 <!-- {{ timeFix }},{{ user.name }} <span class="welcome-text">{{ welcome }}</span> -->
@@ -79,12 +74,7 @@
           </a-card>
 
         </a-col>
-        <a-col :xl="14"
-               :lg="24"
-               :md="24"
-               :sm="24"
-               :xs="24"
-               style="padding: 0 12px;">
+        <a-col :xl="14" :lg="24" :md="24" :sm="24" :xs="24" style="padding: 0 12px;">
           <a-card title="快速开始" style="margin-bottom: 24px;" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <!-- 添加点击事件 -->
@@ -96,8 +86,8 @@
           </a-card>
           <!--  这块等有空换成审计的接口，只是暂时写死 -->
           <a-card title="上次登录" :bordered="false" style="margin-bottom: 24px;">
-            <div style="font-size:16px;margin-bottom:10px;">登录时间：{{ loginTime }}</div>
-            <div style="font-size:16px;">登录IP：{{ loginIP }}</div>
+            <div style="font-size:16px;margin-bottom:10px;">登录时间：{{ lastLoginTime }}</div>
+            <div style="font-size:16px;">登录IP：{{ lastLoginIP }}</div>
           </a-card>
           <a-card title="系统介绍" :bordered="false">
             <div style="font-size:16px;">这是一个基于白盒FPE/OPE的敏感数据服务平台</div>
@@ -130,8 +120,8 @@ export default {
       timeFix: timeFix(),
       avatar: '',
       user: {},
-      loginIP: {},
-      loginTime: {},
+      lastLoginIP: '',
+      lastLoginTime: '',
       projects: [],
       loading: true,
       radarLoading: true,
@@ -217,8 +207,8 @@ export default {
   created() {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-    this.loginIP = this.$store.getters.loginIP
-    this.loginTime = this.$store.getters.loginTime
+    this.lastLoginIP = this.$store.getters.lastLoginIP
+    this.lastLoginTime = this.$store.getters.lastLoginTime
     getRoleList().then(res => {
       // console.log('workplace -> call getRoleList()', res)
     })
