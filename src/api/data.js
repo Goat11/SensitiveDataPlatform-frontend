@@ -11,8 +11,35 @@ const userApi = {
     StuRewardPunishment: '/api/stuInfo/rewardPunishment',
     StuScoreList: '/api/stuInfo/scoreList',
     StuStatus: '/api/stuInfo/status',
-    StuInfoList: '/api/stuInfo/infoList'
+    StuInfoList: '/api/stuInfo/infoList',
+    AllDatabase: '/api/databases',
+    AllTable: '/api/DB_tables',
+    TableData: '/api/database/getList'
+//    UploadData: '/api/database/upload',
+}
 
+export function getTableData(parameter) {
+  return request({
+    url: userApi.TableData,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getAllDatabase(parameter) {
+  return request({
+    url: userApi.AllDatabase,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getAllTable(parameter) {
+  return request({
+    url: userApi.AllTable,
+    method: 'get',
+    params: parameter
+  })
 }
 
 export function getMedInsurance(parameter) {

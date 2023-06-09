@@ -47,9 +47,10 @@
 import { Layout, Tree, Table, Pagination } from 'ant-design-vue'
 import axios from 'axios'
 import {
-    getMedInsurance, getMedPatientInfo, getShopOrderList, getMedicalList,
-    getShopPayList, getShopUserList, getStuInfoList, getStuRewardPunishment,
-    getStuScoreList, getStuStatus
+    // getMedInsurance, getMedPatientInfo, getShopOrderList, getMedicalList,
+    // getShopPayList, getShopUserList, getStuInfoList, getStuRewardPunishment,
+    // getStuScoreList, getStuStatus,
+    getAllTable, getTableData
 } from '@/api/data'
 
 function generateColumns(data) {
@@ -79,52 +80,6 @@ export default {
         return {
             DataID: parseInt(this.$route.params.userID),
             treeData: [], // 数据库结构，先置为空，后续从其它变量赋值
-            treeData1: [ // 后续treeData1, 2, 3, ……要从后端获取
-                {
-                    title: '医保表',
-                    key: 'Insurance'
-                },
-                {
-                    title: '医院表',
-                    key: 'MedicalList'
-                },
-                {
-                    title: '病人表',
-                    key: 'PatientInfo'
-                }
-            ],
-            treeData2: [
-                {
-                    title: '订单表',
-                    key: 'OrderList'
-                },
-                {
-                    title: '用户表',
-                    key: 'UserList'
-                },
-                {
-                    title: '支付表',
-                    key: 'PayList'
-                }
-            ],
-            treeData3: [
-                {
-                    title: '学生信息表',
-                    key: 'StuInfo'
-                },
-                {
-                    title: '学生奖惩表',
-                    key: 'RewardPunishment'
-                },
-                {
-                    title: '学生成绩表',
-                    key: 'ScoreList'
-                },
-                {
-                    title: '学生状态表',
-                    key: 'Status'
-                }
-            ],
             query: '',
             queryResult: null,
             columns: [],
@@ -143,19 +98,31 @@ export default {
         }
     },
     mounted() {
-        this.getTreeData() // 获取数据库结构
+        this.getTreeData() // 获取数据库表结构
     },
     methods: {
         // 获取数据库结构
         getTreeData() {
             const DataBaseId = this.$route.params.id
-            if (DataBaseId === 1) {
-                this.treeData = this.treeData1
-            } else if (DataBaseId === 2) {
-                this.treeData = this.treeData2
-            } else if (DataBaseId === 3) {
-                this.treeData = this.treeData3
-            }
+            // 从后端获取数据库的表结构
+            const params = {}
+            params['DBid'] = DataBaseId
+            getAllTable(params).then(res => {
+                if (res.msg === '请求成功') {
+                    // 更新treeData
+                    this.treeData = []
+                    for (const item of res.data) {
+                        this.treeData.push({
+                            title: item.tablesname,
+                            key: item.tablesname_en
+                        })
+                    }
+                } else {
+                    console.error('请求失败')
+                }
+            }).catch(error => {
+                this.requestFailed(error)
+            })
         },
         // 执行SQL语句
         executeQuery() {
@@ -170,26 +137,8 @@ export default {
         // 选择数据库表，调用获取表数据函数
         onSelect(selectedKeys, info) {
             console.log('selected', selectedKeys, info)
-            if (selectedKeys[0] === 'Insurance') {
-                this.getTable('Insurance')
-            } else if (selectedKeys[0] === 'MedicalList') {
-                this.getTable('MedicalList')
-            } else if (selectedKeys[0] === 'PatientInfo') {
-                this.getTable('PatientInfo')
-            } else if (selectedKeys[0] === 'OrderList') {
-                this.getTable('OrderList')
-            } else if (selectedKeys[0] === 'UserList') {
-                this.getTable('UserList')
-            } else if (selectedKeys[0] === 'PayList') {
-                this.getTable('PayList')
-            } else if (selectedKeys[0] === 'StuInfo') {
-                this.getTable('StuInfo')
-            } else if (selectedKeys[0] === 'RewardPunishment') {
-                this.getTable('RewardPunishment')
-            } else if (selectedKeys[0] === 'ScoreList') {
-                this.getTable('ScoreList')
-            } else if (selectedKeys[0] === 'Status') {
-                this.getTable('Status')
+            if (selectedKeys[0]) {
+                this.getTable(selectedKeys[0])
             } else {
                 this.tableName = ''
                 this.columns = []
@@ -211,23 +160,8 @@ export default {
             params['pageSize'] = this.pagination.pageSize
             params['orderBy'] = 'time DESC'
             params['token'] = this.$store.getters.token
-            // 创建一个映射对象
-            const apiFunctionMap = {
-                'Insurance': getMedInsurance,
-                'MedicalList': getMedicalList,
-                'PatientInfo': getMedPatientInfo,
-                'OrderList': getShopOrderList,
-                'UserList': getShopUserList,
-                'PayList': getShopPayList,
-                'StuInfo': getStuInfoList,
-                'RewardPunishment': getStuRewardPunishment,
-                'ScoreList': getStuScoreList,
-                'Status': getStuStatus
-            }
-            // 通过映射对象获取相应的API请求函数
-            const apiFunction = apiFunctionMap[tablename]
-            // 调用API请求函数
-            apiFunction(params).then(res => {
+            params['tablesname_en'] = tablename // 表名
+            getTableData(params).then(res => {
                 if (res.msg === '请求成功') {
                     this.data = res.data
                     this.pagination.total = res.data.length

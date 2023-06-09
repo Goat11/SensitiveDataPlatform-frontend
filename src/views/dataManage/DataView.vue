@@ -70,34 +70,35 @@
 <script>
 import { TagSelect, StandardFormRow, ArticleListContent } from '@/components'
 import router from '@/router/index'
+import { getAllDatabase } from '@/api/data'
+
 // import IconText from './IconText'
 const TagSelectOption = TagSelect.Option
 
-const dataSource = []
-dataSource.push({
-    // id: 0, // 不写id，表示是新增按钮
-    title: '导入新数据',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '导入新数据'
-})
-dataSource.push({
-    id: 1,
-    title: '医疗信息数据库',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '医疗信息数据库'
-})
-dataSource.push({
-    id: 2,
-    title: '购物信息数据库',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '购物信息数据库'
-})
-dataSource.push({
-    id: 3,
-    title: '学生信息数据库',
-    avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-    content: '学生信息数据库'
-})
+// dataSource.push({
+//     // id: 0, // 不写id，表示是新增按钮
+//     title: '导入新数据',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '导入新数据'
+// })
+// dataSource.push({
+//     id: 1,
+//     title: '医疗信息数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '医疗信息数据库'
+// })
+// dataSource.push({
+//     id: 2,
+//     title: '购物信息数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '购物信息数据库'
+// })
+// dataSource.push({
+//     id: 3,
+//     title: '学生信息数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '学生信息数据库'
+// })
 
 export default {
     name: 'DataView',
@@ -110,7 +111,7 @@ export default {
     },
     data() {
         return {
-            dataSource,
+            dataSource: [],
             loading: true,
             loadingMore: false,
             data: [],
@@ -118,7 +119,15 @@ export default {
         }
     },
     mounted() {
-        this.getList()
+        // 初始化数据
+        this.dataSource.push({
+            // id: 0, // 不写id，表示是新增按钮
+            title: '导入新数据',
+            avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+            content: '导入新数据'
+        })
+        // 获取所有数据库
+        this.getDataBase()
     },
     methods: {
         handleClick() {
@@ -131,20 +140,45 @@ export default {
             // }
             this.$message.error('您没有访问权限！')
         },
+        handleChange(value) {
+            console.log(`selected ${value}`)
+        },
+        // 跳转到数据详情页面
         DataDetail(Data) {
             router.push({
                 name: 'DataDetail',
                 params: { id: Data.id }
             })
         },
+        // 跳转到数据托管页面
         DataTrusteeship() {
             router.push({
                 name: 'DataTrusteeship'
             })
         },
-        handleChange(value) {
-            console.log(`selected ${value}`)
+        // 获取所有数据库
+        getDataBase() {
+            const params = {}
+            //            params['token'] = this.$store.getters.token
+            // 调用API请求函数
+            getAllDatabase(params).then(res => {
+                // if (res.msg === '请求成功') {
+                // } else {
+                //     console.error('请求失败')
+                // }
+                for (let i = 0; i < res.data.length; i++) {
+                    this.dataSource.push({
+                        id: res.data[i].id,
+                        title: res.data[i].DBname,
+                        avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+                        content: res.data[i].DBdescribe
+                    })
+                }
+            }).catch(error => {
+                console.error(error)
+            })
         }
+
     }
 }
 </script>

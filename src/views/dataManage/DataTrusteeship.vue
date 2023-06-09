@@ -3,36 +3,28 @@
     <page-header-wrapper :title="敏感数据管理">
         <a-card :body-style="{ padding: '24px 32px' }" :bordered="false">
             <a-form @submit="handleSubmit" :form="form">
-                <a-form-item :label="$t('数据库名称')"
-:labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
+                <a-form-item :label="$t('数据库名称')" :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
                     :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }">
                     <a-input v-decorator="[
                             'name',
                             { rules: [{ required: true, message: $t('form.basic-form.title.required') }] }
-                        ]"
-name="name"
-:placeholder="$t('请输入您要导入的数据库名称')" />
+                        ]" name="name" :placeholder="$t('请输入您要导入的数据库名称')" />
                 </a-form-item>
 
-                <a-form-item :label="$t('数据库描述')"
-:labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
+                <a-form-item :label="$t('数据库描述')" :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
                     :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }">
-                    <a-textarea rows="4"
-:placeholder="$t('请输入您要导入的数据库描述')"
-v-decorator="[
+                    <a-textarea rows="4" :placeholder="$t('请输入您要导入的数据库描述')" v-decorator="[
                             'description',
                             { rules: [{ required: false, message: $t('form.basic-form.goal.required') }] }
                         ]" />
                 </a-form-item>
 
-                <a-form-item label="数据库标签"
-:labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
+                <a-form-item label="数据库标签" :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
                     :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }">
                     <a-select v-decorator="[
                             'select',
                             { rules: [{ required: true, message: 'Please select your country!' }] },
-                        ]"
-placeholder="请选择一个标签">
+                        ]" placeholder="请选择一个标签">
                         <a-select-option value="student">
                             学生类
                         </a-select-option>
@@ -45,8 +37,7 @@ placeholder="请选择一个标签">
                     </a-select>
                 </a-form-item>
 
-                <a-form-item :label="$t('数据库类型')"
-:labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
+                <a-form-item :label="$t('数据库类型')" :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
                     :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }">
                     <a-radio-group v-decorator="['target', { initialValue: 1 }]">
                         <a-radio :value="1">{{ $t('原始数据') }}</a-radio>
@@ -54,8 +45,7 @@ placeholder="请选择一个标签">
                     </a-radio-group>
                 </a-form-item>
 
-                <a-form-item label="上传数据"
-:labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
+                <a-form-item label="上传数据" :labelCol="{ lg: { span: 7 }, sm: { span: 7 } }"
                     :wrapperCol="{ lg: { span: 10 }, sm: { span: 17 } }">
                     <div class="dropbox">
                         <a-upload-dragger v-decorator="[
@@ -64,9 +54,7 @@ placeholder="请选择一个标签">
                                     valuePropName: 'fileList',
                                     getValueFromEvent: normFile,
                                 },
-                            ]"
-name="files"
-action="/upload.do">
+                            ]" name="files" action="/upload.do">
                             <p class="ant-upload-drag-icon">
                                 <a-icon type="inbox" />
                             </p>
