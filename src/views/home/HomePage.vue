@@ -12,7 +12,7 @@
             <div class="content">
               <div style="font-size: 16px; font-weight: bold;">
                 <!-- {{ timeFix }},{{ user.name }} <span class="welcome-text">{{ welcome }}</span> -->
-                {{ timeFix }}, GOAT <span class="welcome-text">{{ welcome }}</span>
+                {{ timeFix }}, {{user}} <span class="welcome-text">{{ welcome }}</span>
               </div>
               <div>
                 XX企业xx部门xx岗位
@@ -205,8 +205,8 @@ export default {
     }
   },
   created() {
-    this.user = this.userInfo
-    this.avatar = this.userInfo.avatar
+    this.user = this.$store.getters.userID
+    this.avatar = this.$store.getters.avatar
     this.lastLoginIP = this.$store.getters.lastLoginIP
     this.lastLoginTime = this.$store.getters.lastLoginTime
     getRoleList().then(res => {

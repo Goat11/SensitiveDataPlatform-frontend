@@ -163,6 +163,7 @@ export default {
             params['tablesname_en'] = tablename // 表名
             getTableData(params).then(res => {
                 if (res.msg === '请求成功') {
+                    console.log(this.data)
                     this.data = res.data
                     this.pagination.total = res.data.length
                     this.columns = generateColumns(res.data)
