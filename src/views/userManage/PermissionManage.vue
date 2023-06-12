@@ -28,10 +28,10 @@
                                 </a-form-item>
                             </a-col>
                             <a-col :md="8" :sm="24">
-                                <a-space size="large">
+                            <!-- <a-space size="large">
                                     <a-button type="primary" @click="handleCreate">+ 新建</a-button>
                                     <a-button type="default" @click="handleBatchOperation">批量操作</a-button>
-                                </a-space>
+                                                                </a-space> -->
                             </a-col>
                         </a-row>
                     </a-form>
@@ -41,13 +41,20 @@
 rowKey="id"
                         @change="handleTableChange"
 :rowSelection="rowSelection">
-                        <template #action="{ text, record }">
+                        <template slot="permission" slot-scope="scope">
+                            <!-- <a>Invite 一 {{ scope.row }}</a> -->
+                            <a-button type="primary" style="margin-right:5px" @click="agree(scope)">同意</a-button>
+                            <a-button type="danger" style="margin-right:5px" @click="refuse(scope)">拒绝</a-button>
+                            <a-button type="normal" style="margin-right:5px" @click="undo(scope)">撤销</a-button>
+                        </template>
+                    <!-- <template #action="{ text, record }">
                             <a @click="handleEdit(record)">同意</a>
                             <a-divider type="vertical" />
                             <a @click="handleSub(record)">拒绝</a>
                             <a-divider type="vertical" />
-                            <a @click="handleSub(record)">撤销</a>
-                        </template></a-table>
+                                                <a @click="handleSub(record)">撤销</a> -->
+                        <!-- </template> -->
+                    </a-table>
                 </a-card>
             </a-layout-content>
         </a-layout>
@@ -60,7 +67,7 @@ export default {
         return {
             columns: [
                 {
-                    title: '用户编号',
+                    title: '用户',
                     dataIndex: 'userId',
                     key: 'userId'
                 },
@@ -81,11 +88,25 @@ export default {
                 },
                 {
                     title: '权限申请管理',
-                    dataIndex: 'permission',
-                    key: 'permission'
+                    // dataIndex: 'permission',
+                    key: 'permission',
+                    scopedSlots: { customRender: 'permission' }
                 }
             ],
-            data: [],
+            data: [{
+                userId: 'test_user',
+                description: '申请查看字段',
+                status: '未通过',
+                updateTime: '2023-06-12 21:50',
+                permission: []
+            }, {
+                userId: 'test_user',
+                description: '申请查看字段',
+                status: '已通过',
+                updateTime: '2023-06-12 22:53',
+                permission: []
+            }
+            ],
             pagination: {
                 current: 1,
                 pageSize: 10,
@@ -111,6 +132,36 @@ export default {
         handleTableChange(pagination) {
             this.pagination = pagination
             // 分页查询的实现代码
+        },
+        agree(data) {
+            console.log(data)
+            data.status = '已通过'
+            this.$notification.open({
+                message: '已同意',
+                description:
+                    '已同意' + data.userId + '的申请',
+                icon: <a-icon type="smile" style="color: #00FF66" />
+            })
+        },
+        refuse(data) {
+            console.log(data)
+            data.status = '已拒绝'
+            this.$notification.open({
+                message: '已拒绝',
+                description:
+                    '已拒绝' + data.userId + '的申请',
+                icon: <a-icon type="smile" style="color: #FF3300" />
+            })
+        },
+        undo(data) {
+            console.log(data)
+            data.status = '已撤销'
+            this.$notification.open({
+                message: '已撤销',
+                description:
+                    '已撤销' + data.userId + '的申请',
+                icon: <a-icon type="smile" style="color: #108ee9" />
+            })
         }
     }
 }

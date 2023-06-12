@@ -8,11 +8,16 @@
               <a-avatar size="large" :src="currentUser.avatar" />
             </div>
           </a-col>
-          <a-col :xl="10" :lg="24" :md="24" :sm="24" :xs="24" style="margin-left: 20px;">
+          <a-col :xl="10"
+                 :lg="24"
+                 :md="24"
+                 :sm="24"
+                 :xs="24"
+                 style="margin-left: 20px;">
             <div class="content">
               <div style="font-size: 16px; font-weight: bold;">
                 <!-- {{ timeFix }},{{ user.name }} <span class="welcome-text">{{ welcome }}</span> -->
-                {{ timeFix }}, {{user}} <span class="welcome-text">{{ welcome }}</span>
+                {{ timeFix }}, {{ user }} <span class="welcome-text">{{ welcome }}</span>
               </div>
               <div>
                 XX企业xx部门xx岗位
@@ -74,7 +79,12 @@
           </a-card>
 
         </a-col>
-        <a-col :xl="14" :lg="24" :md="24" :sm="24" :xs="24" style="padding: 0 12px;">
+        <a-col :xl="14"
+               :lg="24"
+               :md="24"
+               :sm="24"
+               :xs="24"
+               style="padding: 0 12px;">
           <a-card title="快速开始" style="margin-bottom: 24px;" :bordered="false" :body-style="{ padding: 0 }">
             <div class="item-group">
               <!-- 添加点击事件 -->
