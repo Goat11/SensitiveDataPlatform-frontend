@@ -11,12 +11,10 @@
                 <div class="form-item-inline">
                   <span>数据库名称:</span>
                   <a-form-item :wrapper-col="{ span: 24 }">
-                    <a-input-search
-                      style="max-width: 268px; width: 100%"
-                      placeholder="请输入数据库名称"
-                      v-decorator="['owner']"
-                      @search="handleSearch"
-                    />
+                    <a-input-search style="max-width: 268px; width: 100%"
+placeholder="请输入数据库名称"
+v-decorator="['owner']"
+                      @search="handleSearch" />
                   </a-form-item>
                 </div>
               </a-col>
@@ -42,20 +40,18 @@
           </standard-form-row>
         </a-form>
       </a-card>
-      <a-list
-        rowKey="id"
-        :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
-        :dataSource="dataSource"
-        class="card-list"
-        style="margin-top: 20px"
-      >
+      <a-list rowKey="id"
+:grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
+:dataSource="dataSource"
+class="card-list"
+        style="margin-top: 20px">
         <a-list-item slot="renderItem" slot-scope="item">
-          <!-- <template v-if="!item || item.id === undefined">
+        <!-- <template v-if="!item || item.id === undefined">
                       <a-button class="new-btn" type="dashed" @click="DataTrusteeship">
                           <a-icon type="plus" />
                           导入新数据
                       </a-button>
-                  </template> -->
+                                                          </template> -->
           <template>
             <a-card :hoverable="true">
               <a-card-meta @click="DataDetail(item)">
@@ -67,30 +63,27 @@
                 <!-- <a @click="handleClick">原始数据</a> -->
                 <a @click="DataDetail(item)">申请查看</a>
               </template>
-              <a-modal
-                title="申请访问"
-                :visible="visible"
-                :confirm-loading="confirmLoading"
-                @ok="handleOk"
-                @cancel="handleCancel"
-              >
+              <a-modal title="申请访问"
+:visible="visible"
+:confirm-loading="confirmLoading"
+@ok="handleOk"
+                @cancel="handleCancel">
                 <p>选择数据表</p>
                 <div>
-                  <a-radio-group default-value="a" button-style="solid">
-                    <a-radio-button value="a"> 患者信息表 </a-radio-button>
-                    <a-radio-button value="b"> 就诊信息表 </a-radio-button>
-                    <a-radio-button value="c"> 医保信息表 </a-radio-button>
+                  <a-radio-group button-style="solid" v-model="selectList">
+                    <a-radio-button v-for="it in databaseList[rowId]"
+:key="it.value"
+:value="it.value"
+                      @click="getListName(it.value)">{{
+                        it.label
+                      }}</a-radio-button>
+                  <!-- <a-radio-button value="b"> 就诊信息表 </a-radio-button>
+                                                    <a-radio-button value="c"> 医保信息表 </a-radio-button> -->
                   </a-radio-group>
                 </div>
                 <p style="margin-top: 10px">选择字段</p>
-                <a-radio-group default-value="a" button-style="solid">
-                  <a-radio-button value="a"> MedicalID </a-radio-button>
-                  <a-radio-button value="b"> PatientID </a-radio-button>
-                  <a-radio-button value="c"> Time </a-radio-button>
-                  <a-radio-button value="d"> Hospital </a-radio-button>
-                  <a-radio-button value="e"> Department </a-radio-button>
-                  <a-radio-button value="f"> Doctor </a-radio-button>
-                  <a-radio-button value="g"> Type </a-radio-button>
+                <a-radio-group button-style="solid" v-model="selectListName">
+                  <a-radio-button v-for="(it, index) in chooseList[selectName]" :key="index" :value="index">{{ it }}</a-radio-button>
                 </a-radio-group>
               </a-modal>
             </a-card>
@@ -145,12 +138,71 @@ export default {
   },
   data() {
     return {
+      selectName: 0,
+      selectList: '',
+      selectListName: '',
+      rowId: 0,
       dataSource: [],
       loading: true,
       loadingMore: false,
       data: [],
       form: this.$form.createForm(this),
-      visible: false
+      visible: false,
+      // 数据库表名
+      databaseList: [[{
+        value: 0,
+        label: '患者信息表'
+      }, {
+        value: 1,
+        label: '就诊信息表'
+      }, {
+        value: 2,
+        label: '医保信息表'
+      }
+      ], [
+        {
+          value: 0,
+          label: '用户信息表'
+        }, {
+          value: 1,
+          label: '订单表'
+        }, {
+          value: 2,
+          label: '支付记录表'
+        }
+      ], [
+        {
+          value: 0,
+          label: '学生基本信息表'
+        }, {
+          value: 1,
+          label: '学籍信息表'
+        }, {
+          value: 2,
+          label: '学生成绩表'
+        }, {
+          value: 3,
+          label: '奖惩记录表'
+        }
+      ]
+      ],
+      chooseList: [],
+      listName1: [
+        ['PatientID', 'Name', 'Sex', 'Age', 'IDNumber', 'Address', 'Telephone'],
+        ['MedicalID', 'PatientID', 'Time', 'Hospital', 'Department', 'Doctor', 'Type'],
+        ['PatientID', 'Type', 'CardID', 'ValidityPeriod']
+      ],
+      listName2: [
+        ['UserID', 'Username', 'Telephone', 'Email', 'BankCardNumber'],
+        ['OrderID', 'UserID', 'ProductName', 'Number', 'Status', 'Amount', 'Time', 'Address'],
+        ['PayID', 'Time', 'Status', 'Method', 'Amount', 'SerialNumber']
+      ],
+      listName3: [
+        ['Name', 'Sex', 'Birth', 'IDNumber', 'NativePlace', 'Address', 'Guardian', 'Telephone'],
+        ['Name', 'School', 'AdmissionTime', 'Grade', 'Class', 'StuNumber'],
+        ['StuNumber', 'Name', 'Subject', 'Score'],
+        ['StuNumber', 'Name', 'Reward', 'Punishment']
+      ]
     }
   },
   mounted() {
@@ -163,6 +215,11 @@ export default {
     // })
     // 获取所有数据库
     this.getDataBase()
+  },
+  computed: {
+    selectedArray() {
+      return this.databaseList[this.selectedArrayIndex]
+    }
   },
   methods: {
     handleClick() {
@@ -180,6 +237,14 @@ export default {
     },
     // 跳转到数据详情页面
     DataDetail(Data) {
+      this.rowId = Data.id - 1
+      if (this.rowId === 0) {
+        this.chooseList = this.listName1
+      } else if (this.rowId === 1) {
+        this.chooseList = this.listName2
+      } else {
+        this.chooseList = this.listName3
+      }
       this.visible = true
       // router.push({
       //   name: 'DataDetail',
@@ -192,6 +257,13 @@ export default {
         name: 'DataTrusteeship'
       })
     },
+    getListName(data) {
+      this.selectName = data
+    },
+    who(data) {
+      console.log(data)
+      console.log(this.databaseList)
+    },
     // 获取所有数据库
     getDataBase() {
       const params = {}
@@ -203,6 +275,7 @@ export default {
           // } else {
           //     console.error('请求失败')
           // }
+          // console.log('res is', res)
           for (let i = 0; i < res.data.length; i++) {
             this.dataSource.push({
               id: res.data[i].id,
@@ -215,6 +288,19 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    handleOk(e) {
+      this.ModalText = 'The modal will be closed after two seconds'
+      this.confirmLoading = true
+      setTimeout(() => {
+        this.visible = false
+        this.confirmLoading = false
+      }, 2000)
+      this.$message.success('申请成功！')
+    },
+    handleCancel(e) {
+      console.log('Clicked cancel button')
+      this.visible = false
     }
   }
 }
@@ -236,7 +322,7 @@ export default {
 
 .card-list {
   :deep(.ant-card-body:hover) {
-    .ant-card-meta-title > a {
+    .ant-card-meta-title>a {
       color: @primary-color;
     }
   }
@@ -244,7 +330,7 @@ export default {
   :deep(.ant-card-meta-title) {
     margin-bottom: 12px;
 
-    & > a {
+    &>a {
       display: inline-block;
       max-width: 100%;
       color: rgba(0, 0, 0, 0.85);
