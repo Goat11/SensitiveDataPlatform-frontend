@@ -1,173 +1,227 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
-  <page-header-wrapper title="用户权限申请">
+  <page-header-wrapper :title="数据查看">
+    <template v-slot:content> </template>
     <div>
       <a-card :bordered="false" class="ant-pro-components-tag-select">
         <a-form :form="form" layout="inline">
-          <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
-            <a-form-item>
-              <tag-select>
-                <tag-select-option value="Category2">学生类</tag-select-option>
-                <tag-select-option value="Category3">医疗类</tag-select-option>
-                <tag-select-option value="Category4">购物类</tag-select-option>
-              </tag-select>
-            </a-form-item>
-          </standard-form-row>
-          <standard-form-row title="数据库" grid>
-            <a-row>
-              <a-col :md="24">
-                <a-form-item :wrapper-col="{ span: 24 }">
-                  <a-select style="max-width: 268px; width: 100%;"
-                            mode="multiple"
-                            placeholder="输入数据库名称"
-                            v-decorator="['owner']"
-                            @change="handleChange">
-                    <a-select-option v-for="item in owners" :key="item.id">{{ item.name }}</a-select-option>
-                  </a-select>
-                  <a class="list-articles-trigger" @click="setOwner">只看自己的</a>
-                </a-form-item>
+          <standard-form-row grid last>
+            <a-row :gutter="[0, 20]">
+              <a-col :md="8" :sm="24">
+                <div class="form-item-inline">
+                  <span>数据库名称:</span>
+                  <a-form-item :wrapper-col="{ span: 24 }">
+                    <a-input-search
+                      style="max-width: 268px; width: 100%"
+                      placeholder="请输入数据库名称"
+                      v-decorator="['owner']"
+                      @search="handleSearch"
+                    />
+                  </a-form-item>
+                </div>
               </a-col>
-            </a-row>
-          </standard-form-row>
-
-          <standard-form-row title="其它选项" grid last>
-            <a-row :gutter="16">
-              <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
-                <a-form-item label="数据库平台" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
-                  <a-select placeholder="不限" style="max-width: 200px; width: 100%;">
-                    <a-select-option value="MySQL">MySQL</a-select-option>
-                    <a-select-option value="达梦">达梦</a-select-option>
-                  </a-select>
-                </a-form-item>
+              <a-col :md="8" :sm="24">
+                <div class="form-item-inline">
+                  <span>数据库类型:</span>
+                  <a-form-item :wrapper-col="{ span: 24 }">
+                    <a-select placeholder="不限" style="width: 200px">
+                      <a-select-option value="MySQL">MySQL</a-select-option>
+                      <a-select-option value="达梦">达梦</a-select-option>
+                      <a-select-option value="Oracle">Oracle</a-select-option>
+                    </a-select>
+                  </a-form-item>
+                </div>
               </a-col>
-              <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
-                <a-form-item label="年份" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
-                  <a-select placeholder="不限" style="max-width: 200px; width: 100%;">
-                    <a-select-option value="2023">2023</a-select-option>
-                    <a-select-option value="2022">2022</a-select-option>
-                    <a-select-option value="2021">2021</a-select-option>
-                    <a-select-option value="2020">2020</a-select-option>
-                  </a-select>
+              <a-col :md="8" :sm="24">
+                <a-form-item>
+                  <a-button type="primary">查询</a-button>
+                  <a-button style="margin-left: 8px" @click="resetQuery">重置</a-button>
                 </a-form-item>
               </a-col>
             </a-row>
           </standard-form-row>
         </a-form>
       </a-card>
-
-      <a-card style="margin-top: 24px;" :bordered="false">
-        <a-list size="large" rowKey="id" :loading="loading" itemLayout="vertical" :dataSource="data">
-          <a-list-item :key="item.id" slot="renderItem" slot-scope="item">
-            <template slot="actions">
-              <icon-text type="star-o" :text="item.star" />
-              <icon-text type="like-o" :text="item.like" />
-              <icon-text type="message" :text="item.message" />
-              <a-button type="link" @click="viewDetail(item)">查看详情</a-button>
-              <a-button type="primary" @click="applyAccess(item)">申请访问</a-button>
-            </template>
-            <a-list-item-meta>
-              <a slot="title" href="https://vue.ant.design/">{{ item.title }}</a>
-              <template slot="description">
-                <span>
-                  <a-tag>MySQL</a-tag>
-                  <a-tag>2020年</a-tag>
-                  <a-tag>淘宝</a-tag>
-                </span>
+      <a-list
+        rowKey="id"
+        :grid="{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }"
+        :dataSource="dataSource"
+        class="card-list"
+        style="margin-top: 20px"
+      >
+        <a-list-item slot="renderItem" slot-scope="item">
+          <!-- <template v-if="!item || item.id === undefined">
+                      <a-button class="new-btn" type="dashed" @click="DataTrusteeship">
+                          <a-icon type="plus" />
+                          导入新数据
+                      </a-button>
+                  </template> -->
+          <template>
+            <a-card :hoverable="true">
+              <a-card-meta @click="DataDetail(item)">
+                <a slot="title">{{ item.title }}</a>
+                <a-avatar class="card-avatar" slot="avatar" :src="item.avatar" size="large" />
+                <div class="meta-content" slot="description">{{ item.content }}</div>
+              </a-card-meta>
+              <template class="ant-card-actions" slot="actions">
+                <!-- <a @click="handleClick">原始数据</a> -->
+                <a @click="DataDetail(item)">申请查看</a>
               </template>
-            </a-list-item-meta>
-            <article-list-content :description="item.description"
-                                  :owner="item.owner"
-                                  :avatar="item.avatar"
-                                  :href="item.href"
-                                  :updateAt="item.updatedAt" />
-          </a-list-item>
-          <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
-            <a-button @click="loadMore" :loading="loadingMore">加载更多</a-button>
-          </div>
-        </a-list>
-      </a-card>
+              <a-modal
+                title="申请访问"
+                :visible="visible"
+                :confirm-loading="confirmLoading"
+                @ok="handleOk"
+                @cancel="handleCancel"
+              >
+                <p>选择数据表</p>
+                <div>
+                  <a-radio-group default-value="a" button-style="solid">
+                    <a-radio-button value="a"> 患者信息表 </a-radio-button>
+                    <a-radio-button value="b"> 就诊信息表 </a-radio-button>
+                    <a-radio-button value="c"> 医保信息表 </a-radio-button>
+                  </a-radio-group>
+                </div>
+                <p style="margin-top: 10px">选择字段</p>
+                <a-radio-group default-value="a" button-style="solid">
+                  <a-radio-button value="a"> MedicalID </a-radio-button>
+                  <a-radio-button value="b"> PatientID </a-radio-button>
+                  <a-radio-button value="c"> Time </a-radio-button>
+                  <a-radio-button value="d"> Hospital </a-radio-button>
+                  <a-radio-button value="e"> Department </a-radio-button>
+                  <a-radio-button value="f"> Doctor </a-radio-button>
+                  <a-radio-button value="g"> Type </a-radio-button>
+                </a-radio-group>
+              </a-modal>
+            </a-card>
+          </template>
+        </a-list-item>
+      </a-list>
     </div>
   </page-header-wrapper>
 </template>
 
 <script>
 import { TagSelect, StandardFormRow, ArticleListContent } from '@/components'
-import IconText from './IconText'
+import router from '@/router/index'
+import { getAllDatabase } from '@/api/data'
+
+// import IconText from './IconText'
 const TagSelectOption = TagSelect.Option
 
-const owners = [
-  {
-    id: 'wzj',
-    name: '我自己'
-  },
-  {
-    id: 'wjh',
-    name: '吴家豪'
-  },
-  {
-    id: 'zxx',
-    name: '周星星'
-  },
-  {
-    id: 'zly',
-    name: '赵丽颖'
-  },
-  {
-    id: 'ym',
-    name: '姚明'
-  }
-]
+// dataSource.push({
+//     // id: 0, // 不写id，表示是新增按钮
+//     title: '导入新数据',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '导入新数据'
+// })
+// dataSource.push({
+//     id: 1,
+//     title: '医疗信息数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '医疗信息数据库'
+// })
+// dataSource.push({
+//     id: 2,
+//     title: '购物信息数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '购物信息数据库'
+// })
+// dataSource.push({
+//     id: 3,
+//     title: '学生信息数据库',
+//     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+//     content: '学生信息数据库'
+// })
 
 export default {
-  name: 'PermissionApply',
+  name: 'DataView',
   components: {
     TagSelect,
     TagSelectOption,
     StandardFormRow,
-    ArticleListContent,
-    IconText
+    ArticleListContent
+    // IconText
   },
   data() {
     return {
-      owners,
+      dataSource: [],
       loading: true,
       loadingMore: false,
       data: [],
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      visible: false
     }
   },
   mounted() {
-    this.getList()
+    // 初始化数据
+    // this.dataSource.push({
+    //     // id: 0, // 不写id，表示是新增按钮
+    //     title: '导入新数据',
+    //     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+    //     content: '导入新数据'
+    // })
+    // 获取所有数据库
+    this.getDataBase()
   },
   methods: {
+    handleClick() {
+      // 这里可以根据实际情况检查用户权限，这里仅做示例
+      // const hasPermission = false
+      // const result = response.data
+      // commit('SET_ROLETYPE', result.roleType)
+      // if (result.roleType === 2 || result.roleType === '2') {
+      //     this.$message.error('您没有访问权限！')
+      // }
+      this.$message.error('您没有访问权限！')
+    },
     handleChange(value) {
       console.log(`selected ${value}`)
     },
-    getList() {
-      this.$http.get('/list/article').then(res => {
-        console.log('res', res)
-        this.data = res.result
-        this.loading = false
+    // 跳转到数据详情页面
+    DataDetail(Data) {
+      this.visible = true
+      // router.push({
+      //   name: 'DataDetail',
+      //   params: { id: Data.id }
+      // })
+    },
+    // 跳转到数据托管页面
+    DataTrusteeship() {
+      router.push({
+        name: 'DataTrusteeship'
       })
     },
-    loadMore() {
-      this.loadingMore = true
-      this.$http.get('/list/article').then(res => {
-        this.data = this.data.concat(res.result)
-      }).finally(() => {
-        this.loadingMore = false
-      })
-    },
-    setOwner() {
-      const { form: { setFieldsValue } } = this
-      setFieldsValue({
-        owner: ['wzj']
-      })
+    // 获取所有数据库
+    getDataBase() {
+      const params = {}
+      //            params['token'] = this.$store.getters.token
+      // 调用API请求函数
+      getAllDatabase(params)
+        .then((res) => {
+          // if (res.msg === '请求成功') {
+          // } else {
+          //     console.error('请求失败')
+          // }
+          for (let i = 0; i < res.data.length; i++) {
+            this.dataSource.push({
+              id: res.data[i].id,
+              title: res.data[i].DBname,
+              avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+              content: res.data[i].DBdescribe
+            })
+          }
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }
 }
 </script>
+<style lang='less' scoped>
+@import '~ant-design-vue/lib/style/themes/default.less';
 
-<style lang="less" scoped>
 .ant-pro-components-tag-select {
   :deep(.ant-pro-tag-select .ant-tag) {
     margin-right: 24px;
@@ -178,5 +232,132 @@ export default {
 
 .list-articles-trigger {
   margin-left: 12px;
+}
+
+.card-list {
+  :deep(.ant-card-body:hover) {
+    .ant-card-meta-title > a {
+      color: @primary-color;
+    }
+  }
+
+  :deep(.ant-card-meta-title) {
+    margin-bottom: 12px;
+
+    & > a {
+      display: inline-block;
+      max-width: 100%;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+
+  :deep(.meta-content) {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    height: 64px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    margin-bottom: 1em;
+  }
+}
+
+.card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 48px;
+}
+
+.ant-card-actions {
+  background: #f7f9fa;
+
+  li {
+    float: left;
+    text-align: center;
+    margin: 12px 0;
+    color: rgba(0, 0, 0, 0.45);
+    width: 50%;
+
+    &:not(:last-child) {
+      border-right: 1px solid #e8e8e8;
+    }
+
+    a {
+      color: rgba(0, 0, 0, 0.45);
+      line-height: 22px;
+      display: inline-block;
+      width: 100%;
+
+      &:hover {
+        color: @primary-color;
+      }
+    }
+  }
+}
+
+.new-btn {
+  background-color: #fff;
+  border-radius: 2px;
+  width: 100%;
+  height: 200px;
+}
+
+.page-header-wrapper {
+  padding: 20px;
+}
+
+.primary {
+  margin-bottom: 10px;
+}
+
+.button-wrapper {
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.card-list {
+  margin-top: 20px;
+}
+
+.card-avatar {
+  margin-bottom: 10px;
+}
+
+.meta-content {
+  margin-top: 10px;
+}
+
+.ant-card-actions {
+  margin-top: 10px;
+}
+
+.sql-query-heading {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.sql-query-button {
+  padding-left: 10px;
+}
+
+.sql-query-result {
+  margin-top: 20px;
+}
+
+.query-result-list {
+  margin-top: 10px;
+}
+
+.form-item-inline {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.form-item-inline span {
+  margin-right: 8px;
 }
 </style>
