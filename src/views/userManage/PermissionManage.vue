@@ -31,7 +31,7 @@
                             <!-- <a-space size="large">
                                     <a-button type="primary" @click="handleCreate">+ 新建</a-button>
                                     <a-button type="default" @click="handleBatchOperation">批量操作</a-button>
-                                                                </a-space> -->
+                                                                        </a-space> -->
                             </a-col>
                         </a-row>
                     </a-form>
@@ -41,18 +41,36 @@
 rowKey="id"
                         @change="handleTableChange"
 :rowSelection="rowSelection">
+                    <!-- <template slot="status" slot-scope="scope">
+                            <a-badge :status="text | statusTypeFilter" :text="scope" />
+                                </template> -->
                         <template slot="permission" slot-scope="scope">
                             <!-- <a>Invite 一 {{ scope.row }}</a> -->
-                            <a-button type="primary" style="margin-right:5px" @click="agree(scope)">同意</a-button>
-                            <a-button type="danger" style="margin-right:5px" @click="refuse(scope)">拒绝</a-button>
-                            <a-button type="normal" style="margin-right:5px" @click="undo(scope)">撤销</a-button>
+                            <a-button v-if="scope.status=='待审批'"
+type="primary"
+style="margin-right:5px"
+shape="circle"
+icon="check"
+                                @click="agree(scope)"></a-button>
+                            <a-button v-if="scope.status=='待审批'"
+type="danger"
+style="margin-right:5px"
+shape="circle"
+icon="close"
+                                @click="refuse(scope)"></a-button>
+                            <a-button v-if="scope.status=='已通过'||scope.status=='已拒绝'"
+type="normal"
+style="margin-right:5px"
+shape="circle"
+icon="undo"
+                                @click="undo(scope)"></a-button>
                         </template>
                     <!-- <template #action="{ text, record }">
                             <a @click="handleEdit(record)">同意</a>
                             <a-divider type="vertical" />
                             <a @click="handleSub(record)">拒绝</a>
                             <a-divider type="vertical" />
-                                                <a @click="handleSub(record)">撤销</a> -->
+                                                        <a @click="handleSub(record)">撤销</a> -->
                         <!-- </template> -->
                     </a-table>
                 </a-card>
@@ -96,7 +114,7 @@ export default {
             data: [{
                 userId: 'test_user',
                 description: '申请查看字段',
-                status: '未通过',
+                status: '待审批',
                 updateTime: '2023-06-12 21:50',
                 permission: []
             }, {
@@ -104,6 +122,12 @@ export default {
                 description: '申请查看字段',
                 status: '已通过',
                 updateTime: '2023-06-12 22:53',
+                permission: []
+            }, {
+                userId: 'test_user',
+                description: '申请查看字段',
+                status: '待审批',
+                updateTime: '2023-06-12 23:03',
                 permission: []
             }
             ],
@@ -117,6 +141,14 @@ export default {
                 status: ''
             },
             rowSelection: {}
+        }
+    },
+    filters: {
+        statusFilter(type) {
+            return statusMap[type].text
+        },
+        statusTypeFilter(type) {
+            return statusMap[type].status
         }
     },
     methods: {
@@ -133,6 +165,17 @@ export default {
             this.pagination = pagination
             // 分页查询的实现代码
         },
+        // isStatus(data) {
+        //     if (data === '待审批') {
+        //         return 0
+        //     } else if (data === '已通过') {
+        //         return 1
+        //     } else if (data === '已拒绝') {
+        //         return 2
+        //     } else {
+        //         return 3
+        //     }
+        // },
         agree(data) {
             console.log(data)
             data.status = '已通过'
@@ -150,21 +193,36 @@ export default {
                 message: '已拒绝',
                 description:
                     '已拒绝' + data.userId + '的申请',
-                icon: <a-icon type="smile" style="color: #FF3300" />
+                icon: <a-icon type="frown" style="color: #FF3300" />
             })
         },
         undo(data) {
             console.log(data)
-            data.status = '已撤销'
+            data.status = '待审批'
             this.$notification.open({
                 message: '已撤销',
                 description:
                     '已撤销' + data.userId + '的申请',
-                icon: <a-icon type="smile" style="color: #108ee9" />
+                icon: <a-icon type="coffee" style="color: #108ee9" />
             })
         }
     }
 }
+const statusMap = {
+    0: {
+        status: 'success',
+        text: '已通过'
+    },
+    1: {
+        status: 'error',
+        text: '未通过'
+    },
+    2: {
+        status: 'processing',
+        text: '待通过'
+    }
+}
+
 </script>
 
 <style lang='less' scoped>

@@ -12,10 +12,10 @@
                                 <div class="form-item-inline">
                                     <span>数据库名称:</span>
                                     <a-form-item :wrapper-col="{ span: 24 }">
-                                        <a-input-search style="max-width: 268px; width: 100%;"
-placeholder="请输入数据库名称"
-                                            v-decorator="['owner']"
-@search="handleSearch" />
+                                        <a-input-search v-model="searchInput"
+style="max-width: 268px; width: 100%;"
+                                            placeholder="请输入数据库名称"
+v-decorator="['owner']" />
                                     </a-form-item>
                                 </div>
                             </a-col>
@@ -33,8 +33,8 @@ placeholder="请输入数据库名称"
                             </a-col>
                             <a-col :md="8" :sm="24">
                                 <a-form-item>
-                                    <a-button type="primary">查询</a-button>
-                                    <a-button style="margin-left: 8px" @click="resetQuery">重置</a-button>
+                                    <a-button type="primary" @click="search()">查询</a-button>
+                                    <a-button style="margin-left: 8px" @click="reset()">重置</a-button>
                                 </a-form-item>
                             </a-col>
                         </a-row>
@@ -61,7 +61,7 @@ style="margin-top: 20px;">
                                 <div class="meta-content" slot="description">{{ item.content }}</div>
                             </a-card-meta>
                             <template class="ant-card-actions" slot="actions">
-                                <a @click="handleClick">原始数据</a>
+                                <a @click="OriginData(item)">原始数据</a>
                                 <a @click="DataDetail(item)">脱敏数据</a>
                             </template>
                         </a-card>
@@ -116,6 +116,7 @@ export default {
     },
     data() {
         return {
+            searchInput: '',
             dataSource: [],
             loading: true,
             loadingMore: false,
@@ -125,12 +126,12 @@ export default {
     },
     mounted() {
         // 初始化数据
-        this.dataSource.push({
-            // id: 0, // 不写id，表示是新增按钮
-            title: '导入新数据',
-            avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
-            content: '导入新数据'
-        })
+        // this.dataSource.push({
+        //     // id: 0, // 不写id，表示是新增按钮
+        //     title: '导入新数据',
+        //     avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+        //     content: '导入新数据'
+        // })
         // 获取所有数据库
         this.getDataBase()
     },
@@ -143,10 +144,35 @@ export default {
             // if (result.roleType === 2 || result.roleType === '2') {
             //     this.$message.error('您没有访问权限！')
             // }
-            this.$message.error('您没有访问权限！')
+            // this.$message.error('您没有访问权限！')
         },
         handleChange(value) {
             console.log(`selected ${value}`)
+        },
+        search() {
+            console.log('old search is ', this.dataSource)
+            const searchCon = this.searchInput
+            const newTable = []
+            console.log('searchCon is ', searchCon)
+            if (searchCon) {
+                this.dataSource.filter((item) => {
+                    console.log(item)
+                    // newListData中 没有查询的内容，就添加到newListData中
+                    if (
+                        item.title.indexOf(searchCon) !== -1
+                    ) {
+                        newTable.push(item)
+                    }
+                })
+            }
+            this.dataSource = newTable
+            // if(searchCon)
+            // this.dataSource = this.dataSource.filter(item => item.includes(searchCon))// 筛选出来包含输入框值的元素
+            console.log('search is ', this.dataSource)
+        },
+        reset() {
+            this.dataSource = []
+            this.getDataBase()
         },
         // 跳转到数据详情页面
         DataDetail(Data) {
@@ -154,6 +180,7 @@ export default {
                 name: 'DataDetail',
                 params: { id: Data.id }
             })
+            console.log(Data)
         },
         // 跳转到数据托管页面
         DataTrusteeship() {
@@ -163,6 +190,12 @@ export default {
         },
         // 获取所有数据库
         getDataBase() {
+            this.dataSource.push({
+                // id: 0, // 不写id，表示是新增按钮
+                title: '导入新数据',
+                avatar: 'https://www.quest.com/Images/icons/svg/database-quest-blue.svg',
+                content: '导入新数据'
+            })
             const params = {}
             //            params['token'] = this.$store.getters.token
             // 调用API请求函数
@@ -186,6 +219,7 @@ export default {
 
     }
 }
+
 </script>
 <style lang='less' scoped>
 @import '~ant-design-vue/lib/style/themes/default.less';
