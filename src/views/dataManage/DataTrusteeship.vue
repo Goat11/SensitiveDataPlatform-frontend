@@ -89,10 +89,32 @@
         </a-form-item>
 
         <a-form-item :wrapperCol="{ span: 24 }" style="text-align: center">
-          <a-button htmlType="submit" type="primary">{{ $t('form.basic-form.form.submit') }}</a-button>
+          <a-button htmlType="submit" type="primary">解析</a-button>
         </a-form-item>
       </a-form>
     </a-card>
+    <a-modal :visible="visible" title="敏感字段识别" @ok="handleOk" okText="提交">
+<!--      <a-select-->
+<!--        :value="tableValue"-->
+<!--        style="width: 200px"-->
+<!--        :options="tableOptions"-->
+<!--      ></a-select>-->
+      表名：<a-select
+        style="width: 200px"
+        @change="handleChange"
+      >
+        <a-select-option v-for="option in tableOptions" :value="option.value" :key="option.value">
+          {{ option.title }}
+        </a-select-option>
+      </a-select>
+      <br/><br/>
+      <div v-if="checkOptions.length!==0">自动化识别结果如下： </div><br />
+      <div>
+        <a-checkbox style="display: block; margin-bottom: 10px;" v-for="option in checkOptions" :key="option.value" :checked="option.checked" @change="option.checked=!option.checked">
+          {{ option.title }}
+        </a-checkbox>
+      </div>
+    </a-modal>
   </page-header-wrapper>
 </template>
 
@@ -104,10 +126,33 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this),
-      fileList: [] // 文件列表
+      fileList: [], // 文件列表
+      visible: false,
+      tableValue: '',
+      checkOptions: '',
+      tableOptions: [],
+      data: { 'Volunteer_UserInfo': ['VolunteerID', 'Name', 'Gender', 'Phone', 'Address', 'IDCard'],
+        'Volunteer_VolunteerRecord': ['RecordID', 'VolunteerID', 'ItemName', 'ItemID', 'VolunteerDate', 'VolunteerHours'] }
     }
   },
+  created() {
+    this.tableOptions = Object.keys(this.data).flatMap(key => {
+        return { value: key, title: key, key: key }
+    })
+  },
   methods: {
+    handleChange(option) {
+      const checkFields = ['VolunteerID', 'Phone', 'Address', 'IDCard', 'RecordID', 'VolunteerID']
+      this.checkOptions = this.data[option].map((dict) => {
+        const isChecked = checkFields.includes(dict)
+        return { value: dict, title: dict, key: dict, checked: isChecked }
+      })
+      // VolunteerID、Phone、Address、IDCard、RecordID、VolunteerID
+    },
+    handleOk() {
+      this.$message.success('提交成功')
+      this.visible = false
+    },
     // 文件上传前的检查
     beforeUpload(file) {
       // 添加文件到文件列表中
@@ -132,8 +177,9 @@ export default {
             if (res.status === 1) {
               this.$message.success(res.data.msg)
               this.form.resetFields()
+              this.visible = true
             } else {
-              this.$message.error('提交失败，请重新检查后提交')
+              this.$message.error('解析失败，请重新检查后解析')
             }
           })
         }
