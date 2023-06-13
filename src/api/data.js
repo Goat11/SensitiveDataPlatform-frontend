@@ -14,8 +14,9 @@ const userApi = {
     StuInfoList: '/api/stuInfo/infoList',
     AllDatabase: '/api/databases',
     AllTable: '/api/DB_tables',
-    TableData: '/api/database/getList'
-//    UploadData: '/api/database/upload',
+    TableData: '/api/database/getList',
+    //    UploadData: '/api/database/upload',
+    DatabaseUpdate: '/api/database/update'
 }
 
 export function getTableData(parameter) {
@@ -119,5 +120,21 @@ export function getStuInfoList(parameter) {
     url: userApi.StuInfoList,
     method: 'get',
     params: parameter
+  })
+}
+
+export function databaseUpdate(parameter) {
+  return request({
+    url: userApi.DatabaseUpdate,
+    method: 'post',
+    data: parameter,
+    transformRequest: [function(data, headers) {
+      // 去除post请求默认的Content-Type
+      delete headers.post['Content-Type']
+      return data
+    }]
+    // headers: {
+    //   'Content-Type': 'multipart/form-data' // 设置请求头为multipart/form-data
+    // }
   })
 }
