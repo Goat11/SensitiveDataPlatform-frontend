@@ -15,14 +15,14 @@
                  :xs="24"
                  style="margin-left: 20px;">
             <div class="content">
-              <div style="font-size: 16px; font-weight: bold;">
+              <div style="font-size: 20px; font-weight: bold;">
                 <!-- {{ timeFix }},{{ user.name }} <span class="welcome-text">{{ welcome }}</span> -->
-                {{ timeFix }}, {{ user }} <span class="welcome-text">{{ welcome }}</span>
+                {{ timeFix }}, {{ user }} ！<span class="welcome-text">{{ welcome }}</span>
               </div>
-              <div>
-                XX企业xx部门xx岗位
-                <!-- {{ user.description }} -->
-              </div>
+              <!-- <div>
+                XX企业xx部门xx岗位 -->
+              <!-- {{ user.description }} -->
+              <!-- </div> -->
             </div>
           </a-col>
         </a-row>
@@ -91,7 +91,7 @@
               <a @click="PermissionManage()">用户管理</a>
               <a @click="DataTrusteeship()">数据导入</a>
               <a @click="DataView()">数据查看</a>
-              <a-button size="small" type="primary" ghost icon="plus">添加</a-button>
+              <!-- <a-button size="small" type="primary" ghost icon="plus">添加</a-button> -->
             </div>
           </a-card>
           <!--  这块等有空换成审计的接口，只是暂时写死 -->
@@ -100,7 +100,7 @@
             <div style="font-size:16px;">登录IP：{{ lastLoginIP }}</div>
           </a-card>
           <a-card title="系统介绍" :bordered="false">
-            <div style="font-size:16px;">这是一个基于白盒FPE/OPE的敏感数据服务平台</div>
+            <div style="font-size:16px;">这是一个<span class="important">基于白盒国密算法的敏感数据服务平台</span>，使用数据库的<span class="important">透明网关</span>，对数据表中的敏感数据使用<span class="important">基于白盒分组密码的FPE/OPE加密算法</span>进行脱敏。包含了<span class="important">数据脱敏、数据访问、权限管理、行为审计</span>等功能，为用户提供了一个安全、高效的敏感数据服务平台</div>
           </a-card>
         </a-col>
       </a-row>
@@ -115,6 +115,7 @@ import { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import { Radar } from '@/components'
 import router from '@/router/index'
 import { getRoleList, getServiceList } from '@/api/manage'
+import { axios } from '@/utils/request'
 // import PermissionManage from '../userManage/PermissionManage.vue'
 
 const DataSet = require('@antv/data-set')
@@ -217,8 +218,16 @@ export default {
   created() {
     this.user = this.$store.getters.userID
     this.avatar = this.$store.getters.avatar
-    this.lastLoginIP = this.$store.getters.lastLoginIP
-    this.lastLoginTime = this.$store.getters.lastLoginTime
+    axios
+      .get('http://43.139.91.125:8080/api/user/getIP', this.lastLoginIP)
+      .then((resp) => {
+        this.lastLoginIP = resp.data.lastLoginIP
+      })
+    axios
+      .get('http://43.139.91.125:8080/api/user/getTime', this.lastLoginTime)
+      .then((response) => {
+        this.lastLoginTime = response.data.lastLoginTime
+      })
     getRoleList().then(res => {
       // console.log('workplace -> call getRoleList()', res)
     })
@@ -463,5 +472,8 @@ export default {
 .notification-time {
   font-size: 12px;
   color: #999;
+}
+.important{
+  font-weight: bold;
 }
 </style>
