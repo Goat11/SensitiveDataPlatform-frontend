@@ -76,6 +76,7 @@ style="margin-top: 20px;">
 import { TagSelect, StandardFormRow, ArticleListContent } from '@/components'
 import router from '@/router/index'
 import { getAllDatabase } from '@/api/data'
+import { axios } from '@/utils/request'
 
 // import IconText from './IconText'
 const TagSelectOption = TagSelect.Option
@@ -116,12 +117,14 @@ export default {
     },
     data() {
         return {
+            isClickOrigin: false,
             searchInput: '',
             dataSource: [],
             loading: true,
             loadingMore: false,
             data: [],
-            form: this.$form.createForm(this)
+            form: this.$form.createForm(this),
+            origin: []
         }
     },
     mounted() {
@@ -150,10 +153,8 @@ export default {
             console.log(`selected ${value}`)
         },
         search() {
-            console.log('old search is ', this.dataSource)
             const searchCon = this.searchInput
             const newTable = []
-            console.log('searchCon is ', searchCon)
             if (searchCon) {
                 this.dataSource.filter((item) => {
                     console.log(item)
@@ -174,13 +175,65 @@ export default {
             this.dataSource = []
             this.getDataBase()
         },
+        OriginData(data) {
+            if (this.isClickOrigin) {
+                this.origin = []
+                console.log(data)
+                this.origin.push(
+                    {
+                        id: 0,
+                        databaseId: data.id
+                    }
+                )
+                console.log('data is ', data)
+                axios
+                    .post('http://43.139.91.125:8080/api/', this.origin)
+                    .then((resp) => {
+                        if (resp.data.msg === '请求成功') {
+                            router.push({
+                                name: 'DataDetail',
+                                params: { id: data.id }
+                            })
+                        }
+                    })
+            } else {
+                this.isClickOrigin = true
+                this.$message.error('您没有访问权限！')
+                // console.log('change', this.isClickOrigin)
+            }
+        },
         // 跳转到数据详情页面
-        DataDetail(Data) {
-            router.push({
-                name: 'DataDetail',
-                params: { id: Data.id }
-            })
-            console.log(Data)
+        DataDetail(data) {
+            if (this.isClickOrigin) {
+                this.origin = []
+                console.log(data)
+                this.origin.push(
+                    {
+                        id: 1,
+                        databaseId: data.id
+                    }
+                )
+                console.log('data is ', data)
+                axios
+                    .post('http://43.139.91.125:8080/api/', this.origin)
+                    .then((resp) => {
+                        if (resp.data.msg === '请求成功') {
+                            router.push({
+                                name: 'DataDetail',
+                                params: { id: data.id }
+                            })
+                        }
+                    })
+            } else {
+                this.isClickOrigin = true
+                this.$message.error('您没有访问权限！')
+                // console.log('change', this.isClickOrigin)
+            }
+            // router.push({
+            //     name: 'DataDetail',
+            //     params: { id: Data.id }
+            // })
+            // console.log(Data)
         },
         // 跳转到数据托管页面
         DataTrusteeship() {

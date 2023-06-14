@@ -31,7 +31,7 @@
                             <!-- <a-space size="large">
                                     <a-button type="primary" @click="handleCreate">+ 新建</a-button>
                                     <a-button type="default" @click="handleBatchOperation">批量操作</a-button>
-                                                                        </a-space> -->
+                                                                            </a-space> -->
                             </a-col>
                         </a-row>
                     </a-form>
@@ -40,37 +40,42 @@
 :pagination="pagination"
 rowKey="id"
                         @change="handleTableChange"
-:rowSelection="rowSelection">
-                    <!-- <template slot="status" slot-scope="scope">
-                            <a-badge :status="text | statusTypeFilter" :text="scope" />
-                                </template> -->
+:rowSelection="rowSelection"
+>
+<!-- <template> -->
+                        <!-- <template slot="status">
+                            <a-badge v-if="scope.status == '已通过'" color="green" :text="scope.status" />
+                            <a-badge v-else-if="scope.status == '已拒绝'" color="red" :text="scope.status" />
+                            <a-badge v-else-if="scope.status == '待审批'" color="blue" :text="scope.status" />
+                        </template> -->
                         <template slot="permission" slot-scope="scope">
                             <!-- <a>Invite 一 {{ scope.row }}</a> -->
-                            <a-button v-if="scope.status=='待审批'"
+                            <a-button v-if="scope.status == '待审批'"
 type="primary"
 style="margin-right:5px"
 shape="circle"
-icon="check"
-                                @click="agree(scope)"></a-button>
-                            <a-button v-if="scope.status=='待审批'"
+                                icon="check"
+@click="agree(scope)"></a-button>
+                            <a-button v-if="scope.status == '待审批'"
 type="danger"
 style="margin-right:5px"
 shape="circle"
-icon="close"
-                                @click="refuse(scope)"></a-button>
-                            <a-button v-if="scope.status=='已通过'||scope.status=='已拒绝'"
+                                icon="close"
+@click="refuse(scope)"></a-button>
+                            <a-button v-if="scope.status == '已通过' || scope.status == '已拒绝'"
 type="normal"
 style="margin-right:5px"
-shape="circle"
+                                shape="circle"
 icon="undo"
-                                @click="undo(scope)"></a-button>
+@click="undo(scope)"></a-button>
                         </template>
+                    <!-- </template> -->
                     <!-- <template #action="{ text, record }">
                             <a @click="handleEdit(record)">同意</a>
                             <a-divider type="vertical" />
                             <a @click="handleSub(record)">拒绝</a>
                             <a-divider type="vertical" />
-                                                        <a @click="handleSub(record)">撤销</a> -->
+                                                            <a @click="handleSub(record)">撤销</a> -->
                         <!-- </template> -->
                     </a-table>
                 </a-card>
@@ -87,45 +92,78 @@ export default {
                 {
                     title: '用户',
                     dataIndex: 'userId',
+                    align: 'center',
                     key: 'userId'
                 },
                 {
                     title: '描述',
                     dataIndex: 'description',
+                    align: 'center',
                     key: 'description'
+                },
+                {
+                    title: '数据库',
+                    dataIndex: 'database',
+                    align: 'center',
+                    key: 'database'
+                },
+                {
+                    title: '数据表',
+                    dataIndex: 'list',
+                    align: 'center',
+                    key: 'list'
+                },
+                {
+                    title: '字段',
+                    dataIndex: 'listname',
+                    align: 'center',
+                    key: 'listname'
                 },
                 {
                     title: '状态',
                     dataIndex: 'status',
+                    align: 'center',
                     key: 'status'
+                    // scopedSlots: { customRender: 'status' }
                 },
                 {
                     title: '更新时间',
                     dataIndex: 'updateTime',
+                    align: 'center',
                     key: 'updateTime'
                 },
                 {
                     title: '权限申请管理',
                     // dataIndex: 'permission',
                     key: 'permission',
+                    align: 'center',
                     scopedSlots: { customRender: 'permission' }
                 }
             ],
             data: [{
                 userId: 'test_user',
                 description: '申请查看字段',
+                database: '医疗信息数据库',
+                list: '患者信息表',
+                listname: 'Address',
                 status: '待审批',
                 updateTime: '2023-06-12 21:50',
                 permission: []
             }, {
                 userId: 'test_user',
                 description: '申请查看字段',
+                database: '学生信息数据库',
+                list: '学籍信息表',
+                listname: 'Name',
                 status: '已通过',
                 updateTime: '2023-06-12 22:53',
                 permission: []
             }, {
                 userId: 'test_user',
                 description: '申请查看字段',
+                database: '购物信息数据库',
+                list: '支付记录表',
+                listname: 'SerialNumber',
                 status: '待审批',
                 updateTime: '2023-06-12 23:03',
                 permission: []
@@ -177,7 +215,6 @@ export default {
         //     }
         // },
         agree(data) {
-            console.log(data)
             data.status = '已通过'
             this.$notification.open({
                 message: '已同意',
@@ -187,7 +224,6 @@ export default {
             })
         },
         refuse(data) {
-            console.log(data)
             data.status = '已拒绝'
             this.$notification.open({
                 message: '已拒绝',
@@ -197,7 +233,6 @@ export default {
             })
         },
         undo(data) {
-            console.log(data)
             data.status = '待审批'
             this.$notification.open({
                 message: '已撤销',
