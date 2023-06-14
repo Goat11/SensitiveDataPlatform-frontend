@@ -138,6 +138,7 @@ export default {
   },
   data() {
     return {
+      pattern: 1,
       selectName: 0,
       selectList: '',
       selectListName: '',
@@ -290,12 +291,19 @@ export default {
         })
     },
     handleOk(e) {
-      this.ModalText = 'The modal will be closed after two seconds'
+      this.ModalText = 'The modal will be closed after one seconds'
       this.confirmLoading = true
+      this.pattern = 0
+      sessionStorage.setItem(
+                  'pattern',
+                  JSON.stringify({
+                    pattern: this.pattern
+                  })
+                )
       setTimeout(() => {
         this.visible = false
         this.confirmLoading = false
-      }, 2000)
+      }, 1000)
       this.$message.success('申请成功！')
     },
     handleCancel(e) {
